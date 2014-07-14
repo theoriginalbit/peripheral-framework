@@ -23,7 +23,6 @@ import net.minecraft.tileentity.TileEntity;
  * 
  * @author theoriginalbit
  */
-@Ignore
 public class TilePeripheral extends TileEntity {
 	protected ArrayList<IComputerAccess> computers = Lists.newArrayList();
 	protected String type;
