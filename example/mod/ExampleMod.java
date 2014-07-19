@@ -1,4 +1,4 @@
-package mod.example;
+package mod;
 
 import com.theoriginalbit.minecraft.computercraft.peripheral.PeripheralProvider;
 import cpw.mods.fml.common.Mod;
@@ -7,10 +7,10 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 import dan200.computercraft.api.ComputerCraftAPI;
-import mod.example.alternative.BlockAlternative;
-import mod.example.alternative.TileAlternative;
-import mod.example.standard.BlockSpecial;
-import mod.example.standard.TileSpecial;
+import mod.alternative.BlockAlternative;
+import mod.alternative.TileAlternative;
+import mod.standard.BlockSpecial;
+import mod.standard.TileSpecial;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 

@@ -1,4 +1,4 @@
-package mod.example.alternative;
+package mod.alternative;
 
 import com.theoriginalbit.minecraft.computercraft.peripheral.ILuaPeripheralProvider;
 import net.minecraft.tileentity.TileEntity;

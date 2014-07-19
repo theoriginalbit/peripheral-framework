@@ -1,4 +1,4 @@
-package mod.example.standard;
+package mod.standard;
 
 import com.google.common.collect.Lists;
 import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.Attach;
