@@ -23,6 +23,11 @@ import java.util.ArrayList;
  * must define a method with the Attach and Detach annotations respectively. Note: you may only define
  * one of each method!
  *
+ * It is suggested that you annotate your TileEntities with OpenPeripheral's Ignore annotation so that if
+ * you implement anything such as IInventory on your TileEntity, OpenPeripheral will not attempt to claim
+ * the peripheral as its own. Ignore annotation url:
+ * https://github.com/OpenMods/OpenPeripheral/blob/master/src/main/java/openperipheral/api/Ignore.java
+ *
  * @author theoriginalbit
  */
 @LuaPeripheral(name = "special")
