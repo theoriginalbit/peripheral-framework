@@ -1,4 +1,4 @@
-package com.theoriginalbit.minecraft.computercraft.peripheral.interfaces;
+package com.theoriginalbit.minecraft.computercraft.peripheral.converter;
 
 public interface ITypeConverter {
 	public Object fromLua(Object obj, Class<?> expected);

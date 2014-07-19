@@ -6,7 +6,6 @@ import java.util.Set;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.theoriginalbit.minecraft.computercraft.peripheral.LuaType;
-import com.theoriginalbit.minecraft.computercraft.peripheral.interfaces.ITypeConverter;
 
 public class ConverterSet implements ITypeConverter {
 	@Override

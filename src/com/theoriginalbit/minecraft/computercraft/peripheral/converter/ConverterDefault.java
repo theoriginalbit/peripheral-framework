@@ -2,7 +2,6 @@ package com.theoriginalbit.minecraft.computercraft.peripheral.converter;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
-import com.theoriginalbit.minecraft.computercraft.peripheral.interfaces.ITypeConverter;
 
 public class ConverterDefault implements ITypeConverter {
 	@Override

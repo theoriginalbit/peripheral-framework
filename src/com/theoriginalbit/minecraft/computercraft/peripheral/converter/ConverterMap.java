@@ -5,7 +5,6 @@ import java.util.Map.Entry;
 
 import com.google.common.collect.Maps;
 import com.theoriginalbit.minecraft.computercraft.peripheral.LuaType;
-import com.theoriginalbit.minecraft.computercraft.peripheral.interfaces.ITypeConverter;
 
 public class ConverterMap implements ITypeConverter {
 	@Override

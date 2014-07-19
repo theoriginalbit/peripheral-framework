@@ -1,7 +1,5 @@
 package com.theoriginalbit.minecraft.computercraft.peripheral.converter;
 
-import com.theoriginalbit.minecraft.computercraft.peripheral.interfaces.ITypeConverter;
-
 public class ConverterNumber implements ITypeConverter {
 	@Override
 	public Object fromLua(Object obj, Class<?> expected) {

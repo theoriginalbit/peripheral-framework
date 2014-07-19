@@ -14,7 +14,7 @@ import com.theoriginalbit.minecraft.computercraft.peripheral.converter.Converter
 import com.theoriginalbit.minecraft.computercraft.peripheral.converter.ConverterNumber;
 import com.theoriginalbit.minecraft.computercraft.peripheral.converter.ConverterSet;
 import com.theoriginalbit.minecraft.computercraft.peripheral.converter.ConverterString;
-import com.theoriginalbit.minecraft.computercraft.peripheral.interfaces.ITypeConverter;
+import com.theoriginalbit.minecraft.computercraft.peripheral.converter.ITypeConverter;
 
 import dan200.computercraft.api.lua.ILuaObject;
 

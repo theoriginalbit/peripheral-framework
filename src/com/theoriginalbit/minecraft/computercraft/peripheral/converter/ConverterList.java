@@ -9,7 +9,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.theoriginalbit.minecraft.computercraft.peripheral.LuaType;
-import com.theoriginalbit.minecraft.computercraft.peripheral.interfaces.ITypeConverter;
 
 public class ConverterList implements ITypeConverter {
 	@Override

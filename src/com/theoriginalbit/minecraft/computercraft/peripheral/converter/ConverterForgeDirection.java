@@ -2,8 +2,6 @@ package com.theoriginalbit.minecraft.computercraft.peripheral.converter;
 
 import net.minecraftforge.common.ForgeDirection;
 
-import com.theoriginalbit.minecraft.computercraft.peripheral.interfaces.ITypeConverter;
-
 public class ConverterForgeDirection implements ITypeConverter {
 	@Override
 	public Object fromLua(Object obj, Class<?> expected) {
