@@ -6,16 +6,18 @@ An open-source framework that has the aim of allowing developers to implement th
 Why Use This?
 -------------
 
-- Good for developers;<sup>1</sup>
-- Good for users;<sup>2</sup>
+- Good for developers<sup>1</sup>;
+- Good for users<sup>2</sup>;
 
-<sup>1.</sup> This framework removes the need to define any of ComputerCraft's IPeripheral methods, thus decluttering your classes and making development quicker and easier.
-<sup>2.</sup> Better formatted error messages when the wrong data type, or number of arguments, is provided to your method from the Lua program. e.g. `expected string, got number`
+
+<sup>1</sup> This framework removes the need to define any of ComputerCraft's IPeripheral methods, thus decluttering your classes and making development quicker and easier.
+
+<sup>2</sup> Better formatted error messages when the wrong data type, or number of arguments, is provided to your method from the Lua program. e.g. `expected string, got number`
 
 'Installation'
 --------------
 
-**Important this framework is intended for ComputerCraft 1.63 and any subsequent versions which make use of the same API**
+**IMPORTANT! This framework is intended for ComputerCraft 1.63 and any subsequent versions which make use of the same API**
 
 To use this framework you need to copy the contents of the `src` directory into your project. This includes the much needed ComputerCraft API as well as the source for this framework.
 
