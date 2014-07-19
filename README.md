@@ -21,7 +21,7 @@ Installation for Developers
 
 As a developer, installing this framework is as simple as copying the contents of the `src` directory into your project: this includes dan200's ComputerCraft API if you do not have it installed to your project already.
 
-It is suggested that you utilize [OpenPeripheral's `Ignore` annotation](https://github.com/OpenMods/OpenPeripheral/blob/master/src/main/java/openperipheral/api/Ignore.java) with TileEntities in order to prevent OpenPeripheral from claiming the peripheral as its own.
+It is suggested that you utilize [OpenPeripheral's `Ignore` annotation](https://github.com/OpenMods/OpenPeripheral/blob/master/src/main/java/openperipheral/api/Ignore.java) with TileEntities in order to prevent OpenPeripheral from claiming your TileEntity as its own.
 
 If you'd like to get an example of using this framework, a demo mod has been created [in the example](https://github.com/theoriginalbit/Peripheral-Framework/tree/master/example) folder. The documentation there should get you up and running with relative ease.
 
