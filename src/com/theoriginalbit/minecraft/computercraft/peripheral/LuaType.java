@@ -24,6 +24,7 @@ import dan200.computercraft.api.lua.ILuaObject;
  * @author theoriginalbit
  */
 public enum LuaType {
+
 	TABLE("table", Map.class),
 	NUMBER("number", Double.class),
 	STRING("string", String.class),
@@ -93,4 +94,5 @@ public enum LuaType {
 		CONVERTERS.add(new ConverterNumber());
 		CONVERTERS.add(new ConverterString()); // catch-all
 	}
+
 }

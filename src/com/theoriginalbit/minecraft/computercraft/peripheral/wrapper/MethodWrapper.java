@@ -12,6 +12,7 @@ import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 
 public class MethodWrapper {
+
 	private final String name;
 	private final Method method;
 	private final Class<?>[] javaParams;
@@ -65,4 +66,5 @@ public class MethodWrapper {
 			throw new Exception(e.getMessage());
 		}
 	}
+
 }

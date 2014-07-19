@@ -17,28 +17,22 @@ import dan200.computercraft.api.peripheral.IPeripheralProvider;
  */
 public final class PeripheralProvider implements IPeripheralProvider {
 
-	private final WeakHashMap<TileEntity, PeripheralWrapper> PERIPHERAL_CACHE = new WeakHashMap<TileEntity, PeripheralWrapper>();
-
 	@Override
 	public final IPeripheral getPeripheral(World world, int x, int y, int z, int side) {
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 
-        Class<?> tileClass = null;
-        if (isAnnotated(tile, LuaPeripheral.class)) {
-            tileClass = tile.getClass();
+        Object target = null;
+        if (Utils.isAnnotated(tile, LuaPeripheral.class)) {
+            target = tile;
         } else if (tile instanceof ILuaPeripheralProvider) {
-            tileClass = ((ILuaPeripheralProvider) tile).getPeripheral();
+            target = ((ILuaPeripheralProvider) tile).getPeripheral();
         }
 
-		if (tileClass != null) {
-			return new PeripheralWrapper(tileClass);
+		if (target != null) {
+			return new PeripheralWrapper(target);
 		}
 
 		return null;
 	}
-
-    private final boolean isAnnotated(TileEntity tile, Class<?> annotation) {
-        return tile.getClass().isAnnotationPresent(LuaPeripheral.class);
-    }
 
 }

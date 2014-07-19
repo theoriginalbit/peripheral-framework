@@ -11,11 +11,12 @@ import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
 
 public class PeripheralWrapper implements IPeripheral {
-	private final TilePeripheral instance;
+
+	private final Object instance;
 	private final List<MethodWrapper> methods = Lists.newArrayList();
 	private final String[] methodNames;
 	
-	public PeripheralWrapper(Class<?> peripheral) {
+	public PeripheralWrapper(Object peripheral) {
 		instance = peripheral;
 		
 		List<String> names = Lists.newArrayList();

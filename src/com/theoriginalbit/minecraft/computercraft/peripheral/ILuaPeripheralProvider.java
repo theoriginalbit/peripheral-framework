@@ -5,6 +5,6 @@ package com.theoriginalbit.minecraft.computercraft.peripheral;
  */
 public interface ILuaPeripheralProvider {
 
-    public Class<?> getPeripheral();
+    public Object getPeripheral();
 
 }

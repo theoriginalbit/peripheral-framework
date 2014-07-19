@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
  *
  * @author theoriginalbit
  */
-@Target(ElementType.METHOD)
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface LuaPeripheral {
 
