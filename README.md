@@ -8,8 +8,8 @@ An open-source framework that has the aim of allowing developers to implement th
 Why Use This?
 -------------
 
-- Good for developers<sup>1</sup>;
-- Good for users<sup>2</sup>;
+- Good for developers<sup>1</sup>
+- Good for users<sup>2</sup>
 
 
 <sup>1</sup> This framework removes the need to define any of ComputerCraft's IPeripheral methods, thus decluttering your classes and making development quicker and easier.
@@ -21,7 +21,7 @@ Installation for Developers
 
 As a developer, installing this framework is as simple as copying the contents of the `src` directory into your project: this includes dan200's ComputerCraft API if you do not have it installed to your project already.
 
-It is suggested that you annotate your TileEntities with [OpenPeripheral's Ignore annotation](https://github.com/OpenMods/OpenPeripheral/blob/master/src/main/java/openperipheral/api/Ignore.java) so that if you implement anything such as IInventory on your TileEntity, OpenPeripheral will not attempt to claim the peripheral as its own.
+It is suggested that you utilize [OpenPeripheral's `Ignore` annotation](https://github.com/OpenMods/OpenPeripheral/blob/master/src/main/java/openperipheral/api/Ignore.java) with TileEntities in order to prevent OpenPeripheral from claiming the peripheral as its own.
 
 If you'd like to get an example of using this framework, a demo mod has been created [in the example](https://github.com/theoriginalbit/Peripheral-Framework/tree/master/example) folder. The documentation there should get you up and running with relative ease.
 
@@ -29,9 +29,9 @@ If you'd like to get an example of using this framework, a demo mod has been cre
 Installation for Users
 --------------
 
-If you are not a developer, you can install this framework by downloading the [current release](https://github.com/theoriginalbit/Peripheral-Framework/releases) and dropping it into your mods folder<sup>1</sup>. 
+If you are not a developer, you can install this framework by downloading the [current release](https://github.com/theoriginalbit/Peripheral-Framework/releases)<sup>1</sup> and dropping it into your mods folder.
 
-<sup>1</sup> There aren't actually any releases yet! Check back later and hopefully there will.
+<sup>1</sup> There aren't actually any releases yet.
 
 
 License
