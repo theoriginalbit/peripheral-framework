@@ -2,7 +2,7 @@ package mod.example.standard;
 
 import com.google.common.collect.Lists;
 import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.Attach;
-import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.Detatch;
+import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.Detach;
 import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaFunction;
 import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaPeripheral;
 import dan200.computercraft.api.peripheral.IComputerAccess;
@@ -76,7 +76,7 @@ public class TileSpecial extends TileEntity {
      * The method can be named anything you want, as long as it has the annotation it will
      * be invoked when a computer is detached from your peripheral
      */
-    @Detatch
+    @Detach
     public void detach(IComputerAccess computer) {
         if (computers.contains(computer)) {
             computers.remove(computer);
