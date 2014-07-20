@@ -13,7 +13,7 @@ import net.minecraft.item.ItemStack;
  *
  * @author theoriginalbit
  */
-@LuaPeripheral(name = "alternative")
+@LuaPeripheral("alternative")
 public class PeripheralAlternative {
 
     @LuaFunction

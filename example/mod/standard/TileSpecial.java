@@ -15,7 +15,7 @@ import java.util.ArrayList;
  *
  * This class is annotated with the LuaPeripheral annotation, this tells the PeripheralProvider that
  * you wish this TileEntity to be available to ComputerCraft as a peripheral, with the peripheral type
- * specified through name.
+ * specified.
  *
  * This class must then define methods it wishes to be accessible in Lua with the LuaFunction annotation.
  *
@@ -30,7 +30,7 @@ import java.util.ArrayList;
  *
  * @author theoriginalbit
  */
-@LuaPeripheral(name = "special")
+@LuaPeripheral("special")
 public class TileSpecial extends TileEntity {
 
     /**

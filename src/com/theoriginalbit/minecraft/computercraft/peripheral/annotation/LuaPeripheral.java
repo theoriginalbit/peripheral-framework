@@ -29,8 +29,8 @@ import java.lang.annotation.Target;
 
 /**
  * Specifies that a TileEntity should be wrapped as a peripheral. It
- * should provide the peripheral type through the name value, this
- * is what your mod users will use to wrap your peripheral
+ * should provide the peripheral type as well, this is what your mod
+ * users will use to wrap your peripheral
  *
  * @author theoriginalbit
  */
@@ -38,6 +38,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface LuaPeripheral {
 
-    public String name();
+    public String value();
 
 }
