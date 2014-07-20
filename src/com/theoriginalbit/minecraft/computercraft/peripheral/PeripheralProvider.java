@@ -1,7 +1,6 @@
 package com.theoriginalbit.minecraft.computercraft.peripheral;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Maps;
 import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaPeripheral;
 import com.theoriginalbit.minecraft.computercraft.peripheral.wrapper.PeripheralWrapper;
 
