@@ -21,7 +21,7 @@ Below is a compiled list of the many things that this framework does to make you
  - **Re-use your code —** You shouldn't have to reimplement your peripheral methods in order to provide them as Lua functions. With this framework, simply adding the `@LuaFunction` annotation above your method will mark it as a Lua function.
  - **IPeripheral implementation not required —** There can be no doubt that interfaces are quite useful, but sometimes they add unnecessary clutter to your code. By using this framework you'll remove the need to implement the `IPeripheral` interface and free your code from contract methods.
  - **Seamless conversion between Lua and Java —** Don't worry about wrapping your return values in an `Object[]` array: this framework will handle wrapping your return values in an array.
- - **Automatically handle incorrect arguments -** Without the Peripheral Framework, ensuring that the user has input correct argument types can be a pain. With it however, useful error messages are automatically returned to the user informing them what the argument types should be (e.g. `expected string, got number`).
+ - **Automatically handle incorrect arguments —** Without the Peripheral Framework, ensuring that the user has input correct argument types can be a pain. With it however, useful error messages are automatically returned to the user informing them what the argument types should be (e.g. `expected string, got number`).
  - **And more ... ** The Peripheral Framework does a lot behind the scenes that will help you out when designing peripherals. Check out the [example mod](https://github.com/theoriginalbit/Peripheral-Framework/tree/master/example) for more documentation.
 
 
