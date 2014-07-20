@@ -38,6 +38,16 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface LuaFunction {
 
-    public String value() default "";
+    /**
+     * the name your function should appear as in Lua, if this is
+     * not set it will use the Java name
+     */
+    public String name() default "";
+
+    /**
+     * If your method returns Object[] and you don't wish it to be
+     * converted, you must set this flag to true
+     */
+    public boolean isMultiReturn() default false;
 
 }

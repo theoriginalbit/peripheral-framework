@@ -55,10 +55,10 @@ public class TileSpecial extends TileEntity {
 
     /**
      * Lets assume, that for some reason you wish to have the method appear under a different
-     * name in Lua you can provide a value to the LuaFunction; the only time you should really
+     * name in Lua you can provide a name to the LuaFunction; the only time you should really
      * be using this is in the event of method overloading like shown below.
      */
-    @LuaFunction("bar")
+    @LuaFunction(name = "bar")
     public boolean foo() {
         return foo("incorrect!");
     }
@@ -71,6 +71,27 @@ public class TileSpecial extends TileEntity {
     @LuaFunction
     public void wait(IComputerAccess computer) {
         computer.queueEvent("done_waiting", new Object[0]);
+    }
+
+    /**
+     * By default the Peripheral-Framework will convert return values of Object[] into a
+     * {@link java.util.Map} so that it is a table in Lua
+     */
+    @LuaFunction
+    public Object[] getSomething() {
+        // this will return the table {[1] = "entry1", [2] = "entry2"}
+        return new Object[]{ "entry1", "entry2" };
+    }
+
+    /**
+     * However to do multi-returns we also must return an Object array. So that problems
+     * don't arise we must therefore tell the Peripheral-Framework not to convert this
+     * return value to a table, but instead return it as a multi-return; we do this
+     * via the LuaFunction annotation like so.
+     */
+    @LuaFunction(isMultiReturn = true)
+    public Object[] getSomethingElse() {
+        return new Object[]{ true, "This is a multi-return" };
     }
 
     // A list you can use to track all the computers attached to this peripheral
