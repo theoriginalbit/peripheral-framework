@@ -5,7 +5,6 @@ import java.lang.reflect.Method;
 
 import com.google.common.base.Preconditions;
 import com.theoriginalbit.minecraft.computercraft.peripheral.LuaType;
-import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.Alias;
 import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaFunction;
 
 import dan200.computercraft.api.lua.ILuaContext;
@@ -52,15 +51,16 @@ public class MethodWrapper {
 	private final String name;
 	private final Method method;
 	private final Class<?>[] javaParams;
-	private final TilePeripheral instance;
+	private final Object instance;
 	
-	public MethodWrapper(TilePeripheral peripheral, Method method, LuaFunction function) {
+	public MethodWrapper(Object peripheral, Method method, LuaFunction function) {
 		Preconditions.checkArgument(method.isAnnotationPresent(LuaFunction.class));
 		
 		instance = peripheral;
 		this.method = method;
-		// get the name either from the @Alias or the Java name
-		name = method.isAnnotationPresent(Alias.class) ? method.getAnnotation(Alias.class).value() : method.getName();
+		// get the name either from the LuaFunction name or the Java name
+        final String luaName = function.name();
+		name = (luaName.equals("") || luaName.trim().isEmpty()) ? method.getName() : function.name();
 		
 		javaParams = method.getParameterTypes();
 	}
@@ -86,14 +86,14 @@ public class MethodWrapper {
 		
 		for (int i = 0; i < args.length; ++i) {
 			if (arguments[i] == null) {
-				throw new Exception(String.format("expected %s, got nil", LuaType.findName(javaParams[i])));
+				throw new Exception(String.format("expected %s, got nil", LuaType.getLuaName(javaParams[i])));
 			} else if (IComputerAccess.class.isAssignableFrom(javaParams[i])) {
 				args[i] = access;
 			} else if (ILuaContext.class.isAssignableFrom(javaParams[i])) {
 				args[i] = context;
 			} else {
 				Object convert = LuaType.fromLua(arguments[i], javaParams[i]);
-				Preconditions.checkArgument(convert != null, "expected %s, got %s", LuaType.findName(javaParams[i]), LuaType.findName(arguments[i].getClass()));
+				Preconditions.checkArgument(convert != null, "expected %s, got %s", LuaType.getLuaName(javaParams[i]), LuaType.getLuaName(arguments[i].getClass()));
 				args[i] = convert;
 			}
 		}
