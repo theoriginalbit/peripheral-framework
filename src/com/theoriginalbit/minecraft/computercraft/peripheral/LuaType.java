@@ -125,7 +125,7 @@ public enum LuaType {
      *
      * NOTE: it adds it to the start because order is important!
      */
-    public void registerTypeConverter(ITypeConverter converter) {
+    public static void registerTypeConverter(ITypeConverter converter) {
         if (!CONVERTERS.contains(converter)) {
             CONVERTERS.addFirst(converter);
         }

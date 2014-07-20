@@ -63,6 +63,16 @@ public class TileSpecial extends TileEntity {
         return foo("incorrect!");
     }
 
+    /**
+     * What if you need a reference to the computer that is invoking the method?
+     * Sure, that's fine too. You can also get the ILuaContext if you want it
+     * as well.
+     */
+    @LuaFunction
+    public void wait(IComputerAccess computer) {
+        computer.queueEvent("done_waiting", new Object[0]);
+    }
+
     // A list you can use to track all the computers attached to this peripheral
     private ArrayList<IComputerAccess> computers = Lists.newArrayList();
 
