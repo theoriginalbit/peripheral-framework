@@ -3,9 +3,13 @@ package com.theoriginalbit.minecraft.computercraft.peripheral.wrapper;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.Attach;
+import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.Detach;
 import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaFunction;
 
+import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaPeripheral;
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
@@ -48,30 +52,80 @@ import dan200.computercraft.api.peripheral.IPeripheral;
 public class PeripheralWrapper implements IPeripheral {
 
     /*
-     * TODO: fix the wrapper to check for, and make use of, the new annotation system
+     * TODO: method wrappers are created and stored, if there is an @Alias annotation
+     * the method should also be stored under that name, as a result the List storing
+     * the method wrappers should probably become a map
      */
 
+    private final String peripheralType;
 	private final Object instance;
 	private final List<MethodWrapper> methods = Lists.newArrayList();
+    private final Method attach;
+    private final Method detach;
 	private final String[] methodNames;
 	
 	public PeripheralWrapper(Object peripheral) {
 		instance = peripheral;
-		
+
+        final Class<?> peripheralClass = peripheral.getClass();
+        final LuaPeripheral peripheralLua = peripheralClass.getAnnotation(LuaPeripheral.class);
+
+        // extract the peripheral type from the annotation
+        peripheralType = peripheralLua.value();
+
 		List<String> names = Lists.newArrayList();
-		for (Method m : peripheral.getClass().getMethods()) {
-			if (m.isAnnotationPresent(LuaFunction.class)) {
+        Method attachMethod = null;
+        Method detachMethod = null;
+
+        // for all the methods
+		for (Method m : peripheralClass.getMethods()) {
+            // if the method defines it to be an attach
+            if (isAttachMethod(m)) {
+                Preconditions.checkArgument(attachMethod == null, "Duplicate methods found annotated with Attach, a peripheral can only define one Attach method");
+                Class<?>[] params = m.getParameterTypes();
+                Preconditions.checkArgument(params.length == 1, "Attach methods should only have one argument; IComputerAccess");
+                Preconditions.checkArgument(IComputerAccess.class.isAssignableFrom(params[0]), "Invalid argument on Attach method should be IComputerAccess");
+                attachMethod = m;
+            // if the method defines it to be a detach
+            } else if (isDetachMethod(m)) {
+                Preconditions.checkArgument(detachMethod == null, "Duplicate methods found annotated with Detach, a peripheral can only define one Detach method");
+                Class<?>[] params = m.getParameterTypes();
+                Preconditions.checkArgument(params.length == 1, "Detach methods should only have one argument; IComputerAccess");
+                Preconditions.checkArgument(IComputerAccess.class.isAssignableFrom(params[0]), "Invalid argument on Detach method should be IComputerAccess");
+                detachMethod = m;
+            // if the method defines it to be a LuaFunction
+            } else if (m.isAnnotationPresent(LuaFunction.class)) {
 				MethodWrapper wrapper = new MethodWrapper(peripheral, m, m.getAnnotation(LuaFunction.class));
 				methods.add(wrapper);
 				names.add(wrapper.getLuaName());
 			}
 		}
+        attach = attachMethod;
+        detach = detachMethod;
 		methodNames = names.toArray(new String[names.size()]);
 	}
 
+    private boolean isAttachMethod(Method method) {
+        if (method.isAnnotationPresent(Attach.class)) {
+            Preconditions.checkArgument(!method.isAnnotationPresent(Detach.class), "Attach method cannot also be a Detach method");
+            Preconditions.checkArgument(!method.isAnnotationPresent(LuaFunction.class), "Attach method cannot also be a LuaFunction method");
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isDetachMethod(Method method) {
+        if (method.isAnnotationPresent(Detach.class)) {
+            Preconditions.checkArgument(!method.isAnnotationPresent(Attach.class), "Detach method cannot also be an Attach method");
+            Preconditions.checkArgument(!method.isAnnotationPresent(LuaFunction.class), "Detach method cannot also be a LuaFunction method");
+            return true;
+        }
+        return false;
+    }
+
 	@Override
 	public String getType() {
-		return instance.getType();
+		return peripheralType;
 	}
 
 	@Override
@@ -86,12 +140,16 @@ public class PeripheralWrapper implements IPeripheral {
 
 	@Override
 	public void attach(IComputerAccess computer) {
-		instance.attach(computer);
+        try {
+            attach.invoke(instance, computer);
+        } catch (Exception e) {}
 	}
 
 	@Override
 	public void detach(IComputerAccess computer) {
-		instance.detach(computer);
+        try {
+            detach.invoke(instance, computer);
+        } catch (Exception e) {}
 	}
 
 	@Override
