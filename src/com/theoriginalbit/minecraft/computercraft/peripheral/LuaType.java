@@ -1,8 +1,8 @@
 package com.theoriginalbit.minecraft.computercraft.peripheral;
 
-import java.util.Deque;
-import java.util.Map;
+import java.util.*;
 
+import com.google.common.collect.Maps;
 import net.minecraftforge.common.ForgeDirection;
 
 import com.google.common.collect.Lists;
@@ -54,48 +54,56 @@ import dan200.computercraft.api.lua.ILuaObject;
  * 
  * @author theoriginalbit
  */
-public enum LuaType {
+public final class LuaType {
 
-	TABLE("table", Map.class),
-	NUMBER("number", Double.class),
-	STRING("string", String.class),
-	NIL("nil", void.class),
-	BOOLEAN("boolean", Boolean.class),
-	FORGEDIRECTION("direction", ForgeDirection.class),
-	OBJECT("?", Object.class);
+    private static final Deque<ITypeConverter> CONVERTERS = Lists.newLinkedList();
+    private static final HashMap<Class<?>, String> CLASS_TO_NAME = Maps.newHashMap();
 
     /**
-     * A list of all the converters available
+     * Registers the supplied converter to the conversion system.
+     * Use this to supply converters for custom classes, such as
+     * ItemStack or the likes, so that these objects can be converted
+     * to and from Lua.
+     *
+     * NOTE: it adds it to the start because order is important!
      */
-	private static final Deque<ITypeConverter> CONVERTERS = Lists.newLinkedList();
+    public static void registerTypeConverter(ITypeConverter converter) {
+        if (!CONVERTERS.contains(converter)) {
+            CONVERTERS.addFirst(converter);
+        }
+    }
 
-	private final String luaName;
-	private final Class<?> javaType;
+    /**
+     * Maps the supplied Java class to the supplied Lua name, for example
+     * an array, map, list, and set, are all mapped to "table" so that when
+     * these arguments are supplied incorrectly the user will be told
+     * 'expected table, got string'. If there is no mapping '?' will be
+     * returned, as such it is highly recommended that you register a
+     * readable name for any custom converters you make.
+     */
+    public static void registerClassToNameMapping(Class<?> clazz, String name) {
+        if (!CLASS_TO_NAME.containsKey(clazz) && !CLASS_TO_NAME.containsValue(name)) {
+            CLASS_TO_NAME.put(clazz, name);
+        }
+    }
 
-	private LuaType(String name, Class<?> type) {
-		luaName = name;
-		javaType = type;
-	}
+    /**
+     * Returns the Lua name for the supplied Java class if a mapping exists for it
+     * if a mapping does not exist '?' will be returned.
+     */
+    public static String getLuaName(Class<?> clazz) {
+        if (clazz == null) {
+            return "nil";
+        }
 
-	public Class<?> getJavaType() {
-		return javaType;
-	}
+        for (Map.Entry<Class<?>, String> entry : CLASS_TO_NAME.entrySet()) {
+            if (entry.getKey().isAssignableFrom(clazz)) {
+                return entry.getValue();
+            }
+        }
 
-	public String getLuaName() {
-		return luaName;
-	}
-
-	public static String findName(Class<?> clazz) {
-		if (clazz == null) {
-			return "nil";
-		}
-		for (LuaType t : values()) {
-			if (clazz.isAssignableFrom(t.getJavaType())) {
-				return t.getLuaName();
-			}
-		}
-		return "?";
-	}
+        return "?";
+    }
 
 	public static Object fromLua(Object obj, Class<?> expected) {
 		for (ITypeConverter converter : CONVERTERS) {
@@ -117,21 +125,20 @@ public enum LuaType {
 		throw new IllegalStateException("Conversion failed on " + obj);
 	}
 
-    /**
-     * Registers the supplied converter to the conversion system.
-     * Use this to supply converters for custom classes, such as
-     * ItemStack or the likes, so that these objects can be converted
-     * to and from Lua.
-     *
-     * NOTE: it adds it to the start because order is important!
-     */
-    public static void registerTypeConverter(ITypeConverter converter) {
-        if (!CONVERTERS.contains(converter)) {
-            CONVERTERS.addFirst(converter);
-        }
-    }
-	
 	static {
+        // register default class to name mappings
+        CLASS_TO_NAME.put(Object[].class, "table");
+        CLASS_TO_NAME.put(Map.class, "table");
+        CLASS_TO_NAME.put(List.class, "table");
+        CLASS_TO_NAME.put(Set.class, "table");
+        CLASS_TO_NAME.put(Number.class, "number");
+        CLASS_TO_NAME.put(String.class, "string");
+        CLASS_TO_NAME.put(Void.class, "nil");
+        CLASS_TO_NAME.put(Boolean.class, "boolean");
+        CLASS_TO_NAME.put(ForgeDirection.class, "direction");
+        CLASS_TO_NAME.put(Object.class, "?");
+
+        // register default converters
 		CONVERTERS.add(new ConverterForgeDirection());
 		// Order is important from here on!
 		CONVERTERS.add(new ConverterArray());

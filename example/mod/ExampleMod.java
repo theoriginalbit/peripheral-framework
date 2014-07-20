@@ -15,6 +15,7 @@ import mod.standard.BlockSpecial;
 import mod.standard.TileSpecial;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemStack;
 
 /**
  * This is your main mod class.
@@ -44,9 +45,13 @@ public class ExampleMod {
         GameRegistry.registerBlock(blockAlternative, "Alternative Block");
         GameRegistry.registerTileEntity(TileAlternative.class, "Alternative Tile");
 
-        // We have methods in PeripheralALternative that return or want ItemStacks,
+        // We have methods in PeripheralAlternative that return or want ItemStacks,
         // we have to register a converter for these
         LuaType.registerTypeConverter(new ConverterItemStack());
+
+        // we have a custom converter, so that this doesn't appear as a '?' in Lua-side
+        // error messages we provide a name mapping for it
+        LuaType.registerClassToNameMapping(ItemStack.class, "item");
     }
 
     /**

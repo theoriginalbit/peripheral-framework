@@ -31,7 +31,13 @@ package com.theoriginalbit.minecraft.computercraft.peripheral.converter;
  * from a Java object to a Lua object. Be aware that Lua deals with
  * a very small and specific subset of data types!
  *
- * An example of a type converter can be found in the example mod url:
+ * It is highly suggested when adding type converters to also add a
+ * name mapping through LuaType#registerClassToNameMapping so that
+ * if an error arises Lua-side your custom class will show a readable
+ * name as opposed to '?'
+ *
+ * An example of a type converter and registering its name mapping can
+ * be found in the example mod url:
  * https://github.com/theoriginalbit/Peripheral-Framework/tree/master/example
  *
  * @author theoriginalbit
