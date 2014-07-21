@@ -1,6 +1,5 @@
 package mod.special;
 
-import com.google.common.collect.Lists;
 import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.*;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import net.minecraft.tileentity.TileEntity;
@@ -150,29 +149,21 @@ public class TileSpecial extends TileEntity {
         System.out.println("Foo bar!");
     }
 
-    // A list you can use to track all the computers attached to this peripheral
-    private ArrayList<IComputerAccess> computers = Lists.newArrayList();
+    /**
+     * This specifies a list that will contain all the possible computers attached to this
+     * peripheral, these attached computers are maintained by the Peripheral-Framework, thus
+     * you do not even need to assign this variable to anything.
+     */
+    @Computers
+    public ArrayList<IComputerAccess> computers;
 
     /**
-     * The method can be named anything you want, as long as it has the annotation it will
-     * be invoked when a computer is attached to your peripheral
+     * An example method that iterates all the computers and queues an event to them
      */
-    @OnAttach
-    public void attach(IComputerAccess computer) {
-        if (!computers.contains(computer)) {
-            computers.add(computer);
+    @LuaFunction
+    public void queuer(String s) {
+        for (IComputerAccess c : computers) {
+            c.queueEvent(s, new Object[0]);
         }
     }
-
-    /**
-     * The method can be named anything you want, as long as it has the annotation it will
-     * be invoked when a computer is detached from your peripheral
-     */
-    @OnDetach
-    public void detach(IComputerAccess computer) {
-        if (computers.contains(computer)) {
-            computers.remove(computer);
-        }
-    }
-
 }

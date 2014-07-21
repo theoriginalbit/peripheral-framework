@@ -1,10 +1,13 @@
 package com.theoriginalbit.minecraft.computercraft.peripheral.wrapper;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.*;
 
@@ -51,13 +54,11 @@ import dan200.computercraft.api.peripheral.IPeripheral;
 public class PeripheralWrapper implements IPeripheral {
 
     private final String peripheralType;
-	private final Object instance;
     private final LinkedHashMap<String, MethodWrapper> methods = Maps.newLinkedHashMap();
-    private final Method attach;
-    private final Method detach;
 	private final String[] methodNames;
-	
-	public PeripheralWrapper(Object peripheral) {
+    private final ArrayList<IComputerAccess> computers = Lists.newArrayList();
+
+    public PeripheralWrapper(Object peripheral) {
 		final Class<?> peripheralClass = peripheral.getClass();
         final LuaPeripheral peripheralLua = peripheralClass.getAnnotation(LuaPeripheral.class);
 
@@ -65,26 +66,9 @@ public class PeripheralWrapper implements IPeripheral {
         final String pname = peripheralLua.value().trim();
         Preconditions.checkArgument(!pname.isEmpty(), "Peripheral name cannot be an empty string");
 
-        Method attachMethod = null;
-        Method detachMethod = null;
-
 		for (Method m : peripheralClass.getMethods()) {
-            // if the method defines it to be an attach
-            if (isAttachMethod(m)) {
-                Preconditions.checkArgument(attachMethod == null, "Duplicate methods found annotated with OnAttach, a peripheral can only define one OnAttach method");
-                Class<?>[] params = m.getParameterTypes();
-                Preconditions.checkArgument(params.length == 1, "OnAttach methods should only have one argument; IComputerAccess");
-                Preconditions.checkArgument(IComputerAccess.class.isAssignableFrom(params[0]), "Invalid argument on OnAttach method should be IComputerAccess");
-                attachMethod = m;
-            // if the method defines it to be a detach
-            } else if (isDetachMethod(m)) {
-                Preconditions.checkArgument(detachMethod == null, "Duplicate methods found annotated with OnDetach, a peripheral can only define one OnDetach method");
-                Class<?>[] params = m.getParameterTypes();
-                Preconditions.checkArgument(params.length == 1, "OnDetach methods should only have one argument; IComputerAccess");
-                Preconditions.checkArgument(IComputerAccess.class.isAssignableFrom(params[0]), "Invalid argument on OnDetach method should be IComputerAccess");
-                detachMethod = m;
             // if the method defines it to be a LuaFunction, and it is specified to be enabled
-            } else if (m.isAnnotationPresent(LuaFunction.class) && isEnabled(m)) {
+            if (m.isAnnotationPresent(LuaFunction.class) && isEnabled(m)) {
                 LuaFunction annotation = m.getAnnotation(LuaFunction.class);
                 // extract the method name either from the annotation or the actual name
                 final String name = annotation.name().trim().isEmpty() ? m.getName() : annotation.name().trim();
@@ -106,10 +90,18 @@ public class PeripheralWrapper implements IPeripheral {
             }
 		}
 
-        instance = peripheral;
+        // check for the @Computer fields and assign them to this instances computer list
+        for (Field f : peripheralClass.getDeclaredFields()) {
+            if (f.isAnnotationPresent(Computers.class)) {
+                try {
+                    f.set(peripheral, computers);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
         peripheralType = pname;
-        attach = attachMethod;
-        detach = detachMethod;
         Set<String> keys = methods.keySet();
 		methodNames = keys.toArray(new String[keys.size()]);
 	}
@@ -133,55 +125,25 @@ public class PeripheralWrapper implements IPeripheral {
 
 	@Override
 	public void attach(IComputerAccess computer) {
-        // try to invoke the defined attach method
-        try {
-            attach.invoke(instance, computer);
-        } catch (Exception e) {
-            if (attach != null) {
-                e.printStackTrace();
-            }
+        if (!computers.contains(computer)) {
+            computers.add(computer);
         }
 	}
 
 	@Override
 	public void detach(IComputerAccess computer) {
-        // try to invoke the defined detach method
-        try {
-            detach.invoke(instance, computer);
-        } catch (Exception e) {
-            if (detach != null) {
-                e.printStackTrace();
-            }
+        if (computers.contains(computer)) {
+            computers.remove(computer);
         }
 	}
 
     /**
-     * dan200, what the hell does this do? and how does it differ from Javas native equals?
+     * dan200, why do we have to do this? why can't we just use Java's native equals?
      */
 	@Override
 	public boolean equals(IPeripheral other) {
-		return false;
+        return other != null && other instanceof PeripheralWrapper && other == this;
 	}
-
-    private boolean isAttachMethod(Method method) {
-        if (method.isAnnotationPresent(OnAttach.class)) {
-            Preconditions.checkArgument(!method.isAnnotationPresent(Alias.class), "OnAttach method cannot have an alias");
-            Preconditions.checkArgument(!method.isAnnotationPresent(OnDetach.class), "OnAttach method cannot also be a OnDetach method");
-            Preconditions.checkArgument(!method.isAnnotationPresent(LuaFunction.class), "OnAttach method cannot also be a LuaFunction method");
-            return true;
-        }
-        return false;
-    }
-
-    private boolean isDetachMethod(Method method) {
-        if (method.isAnnotationPresent(OnDetach.class)) {
-            Preconditions.checkArgument(!method.isAnnotationPresent(Alias.class), "OnDetach method cannot have an alias");
-            Preconditions.checkArgument(!method.isAnnotationPresent(OnAttach.class), "OnDetach method cannot also be an OnAttach method");
-            Preconditions.checkArgument(!method.isAnnotationPresent(LuaFunction.class), "OnDetach method cannot also be a LuaFunction method");
-            return true;
-        }
-        return false;
-    }
 
     private boolean isEnabled(Method method) {
         // get the mod ids specified that this method should be enabled for

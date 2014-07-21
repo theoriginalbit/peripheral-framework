@@ -28,11 +28,15 @@ import java.lang.annotation.Target;
  */
 
 /**
- * Specifies that the annotated method will handle the {@link dan200.computercraft.api.peripheral.IPeripheral#detach(dan200.computercraft.api.peripheral.IComputerAccess)}
- * method on your {@link com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaPeripheral} annotated {@link net.minecraft.tileentity.TileEntity}
+ * Specifies your list for the attached IComputerAccess instances. When
+ * computers are attached or detached from your peripheral this list
+ * will be updated by the peripheral wrapper, this means you can count
+ * on this list always having an up-to-date list of computers attached.
+ * You may use this list however you wish, though a common usage would
+ * be to queue events to all computers.
  *
  * @author theoriginalbit
  */
-@Target(ElementType.METHOD)
+@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface OnDetach {}
+public @interface Computers {}
