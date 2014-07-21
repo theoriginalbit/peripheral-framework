@@ -51,6 +51,18 @@ public class TileSpecial extends TileEntity {
     }
 
     /**
+     * If you want to error back to the user, you can do this just like you would with
+     * the IPeripheral interface, simply throw an exception and the Peripheral-Framework
+     * will pass this exception back to ComputerCraft
+     */
+    @LuaFunction
+    public void rangeCheck(int num) throws Exception {
+        if (num < 0 || num > 7) {
+            throw new Exception("Number must be in range 1-6");
+        }
+    }
+
+    /**
      * Lets assume, that for some reason you wish to have the method appear under a different
      * name in Lua you can provide a name to the LuaFunction; the only time you should really
      * be using this is in the event of method overloading like shown below.
