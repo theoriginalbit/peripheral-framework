@@ -83,7 +83,7 @@ public class ConverterArray implements ITypeConverter {
 			HashMap<Integer, Object> map = Maps.newHashMap();
 			int length = Array.getLength(obj);
 			for (int i = 0; i < length; ++i) {
-				map.put(i + 1, LuaType.toLua(Array.get(0, i)));
+				map.put(i + 1, LuaType.toLua(Array.get(obj, i)));
 			}
 			return map;
 		}
