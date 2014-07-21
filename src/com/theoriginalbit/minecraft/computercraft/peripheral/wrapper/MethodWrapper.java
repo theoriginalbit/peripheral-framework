@@ -82,15 +82,17 @@ public class MethodWrapper {
 
 		Object[] args = new Object[javaParams.length];
 		for (int i = 0; i < args.length; ++i) {
-			if (IComputerAccess.class.isAssignableFrom(javaParams[i])) {
+            if (IComputerAccess.class.isAssignableFrom(javaParams[i])) {
 				args[i] = access;
 			} else if (ILuaContext.class.isAssignableFrom(javaParams[i])) {
 				args[i] = context;
-			} else {
+			} else if (arguments[i] != null) {
 				final Object convert = LuaType.fromLua(arguments[i], javaParams[i]);
 				Preconditions.checkArgument(convert != null, "expected %s, got %s", LuaType.getLuaName(javaParams[i]), LuaType.getLuaName(arguments[i].getClass()));
 				args[i] = convert;
-			}
+			} else {
+                throw new Exception(String.format("expected %s, got nil", LuaType.getLuaName(javaParams[i])));
+            }
 		}
 		
 		try {
