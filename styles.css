@@ -1,0 +1,41 @@
+body {
+    font-family: sans-serif;
+}
+
+
+code {
+    white-space: pre-wrap;
+}
+
+#withframework {
+    position: absolute;
+    top: 75px;
+    left: 1%;
+    width: 47.5%;
+    border-radius: 15px;
+}
+
+#withoutframework {
+    position: absolute;
+    top: 75px;
+    right: 1%;
+    width: 47.5%;
+    border-radius: 15px;
+}
+
+h1 {
+    position: absolute;
+    top: 0;
+    text-align: center;
+    height: 55px;
+}
+
+.withtext {
+    left: 0;
+    width: 50%;
+}
+
+.withouttext {
+    left: 50%;
+    width: 50%;
+}
