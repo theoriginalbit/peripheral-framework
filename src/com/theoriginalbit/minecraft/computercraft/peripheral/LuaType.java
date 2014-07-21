@@ -3,12 +3,10 @@ package com.theoriginalbit.minecraft.computercraft.peripheral;
 import java.util.*;
 
 import com.google.common.collect.Maps;
-import net.minecraftforge.common.ForgeDirection;
 
 import com.google.common.collect.Lists;
 import com.theoriginalbit.minecraft.computercraft.peripheral.converter.ConverterArray;
 import com.theoriginalbit.minecraft.computercraft.peripheral.converter.ConverterDefault;
-import com.theoriginalbit.minecraft.computercraft.peripheral.converter.ConverterForgeDirection;
 import com.theoriginalbit.minecraft.computercraft.peripheral.converter.ConverterList;
 import com.theoriginalbit.minecraft.computercraft.peripheral.converter.ConverterMap;
 import com.theoriginalbit.minecraft.computercraft.peripheral.converter.ConverterNumber;
@@ -96,6 +94,10 @@ public final class LuaType {
             return "nil";
         }
 
+        if (CLASS_TO_NAME.containsKey(clazz)) {
+            return CLASS_TO_NAME.get(clazz);
+        }
+
         for (Map.Entry<Class<?>, String> entry : CLASS_TO_NAME.entrySet()) {
             if (entry.getKey().isAssignableFrom(clazz)) {
                 return entry.getValue();
@@ -132,15 +134,21 @@ public final class LuaType {
         CLASS_TO_NAME.put(List.class, "table");
         CLASS_TO_NAME.put(Set.class, "table");
         CLASS_TO_NAME.put(Number.class, "number");
+        CLASS_TO_NAME.put(int.class, "number");
+        CLASS_TO_NAME.put(long.class, "number");
+        CLASS_TO_NAME.put(short.class, "number");
+        CLASS_TO_NAME.put(byte.class, "number");
+        CLASS_TO_NAME.put(double.class, "number");
+        CLASS_TO_NAME.put(float.class, "number");
         CLASS_TO_NAME.put(String.class, "string");
         CLASS_TO_NAME.put(Void.class, "nil");
         CLASS_TO_NAME.put(Boolean.class, "boolean");
-        CLASS_TO_NAME.put(ForgeDirection.class, "direction");
+        CLASS_TO_NAME.put(boolean.class, "boolean");
+        CLASS_TO_NAME.put(Void.class, "nil");
+        CLASS_TO_NAME.put(void.class, "nil");
         CLASS_TO_NAME.put(Object.class, "?");
 
-        // register default converters
-		CONVERTERS.add(new ConverterForgeDirection());
-		// Order is important from here on!
+        // register default converters order is important!
 		CONVERTERS.add(new ConverterArray());
 		CONVERTERS.add(new ConverterList());
 		CONVERTERS.add(new ConverterMap());
