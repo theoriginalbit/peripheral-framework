@@ -1,15 +1,12 @@
 package com.theoriginalbit.minecraft.computercraft.peripheral.wrapper;
 
 import java.lang.reflect.Method;
-import java.util.List;
+import java.util.LinkedHashMap;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
-import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.Attach;
-import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.Detach;
-import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaFunction;
+import com.google.common.collect.Maps;
+import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.*;
 
-import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaPeripheral;
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
@@ -51,33 +48,24 @@ import dan200.computercraft.api.peripheral.IPeripheral;
  */
 public class PeripheralWrapper implements IPeripheral {
 
-    /*
-     * TODO: method wrappers are created and stored, if there is an @Alias annotation
-     * the method should also be stored under that name, as a result the List storing
-     * the method wrappers should probably become a map
-     */
-
     private final String peripheralType;
 	private final Object instance;
-	private final List<MethodWrapper> methods = Lists.newArrayList();
+    private final LinkedHashMap<String, MethodWrapper> methods = Maps.newLinkedHashMap();
     private final Method attach;
     private final Method detach;
 	private final String[] methodNames;
 	
 	public PeripheralWrapper(Object peripheral) {
-		instance = peripheral;
-
-        final Class<?> peripheralClass = peripheral.getClass();
+		final Class<?> peripheralClass = peripheral.getClass();
         final LuaPeripheral peripheralLua = peripheralClass.getAnnotation(LuaPeripheral.class);
 
-        // extract the peripheral type from the annotation
-        peripheralType = peripheralLua.value();
+        // validate the peripheral type
+        final String pname = peripheralLua.value().trim();
+        Preconditions.checkArgument(!pname.isEmpty(), "Peripheral name cannot be an empty string");
 
-		List<String> names = Lists.newArrayList();
         Method attachMethod = null;
         Method detachMethod = null;
 
-        // for all the methods
 		for (Method m : peripheralClass.getMethods()) {
             // if the method defines it to be an attach
             if (isAttachMethod(m)) {
@@ -95,33 +83,33 @@ public class PeripheralWrapper implements IPeripheral {
                 detachMethod = m;
             // if the method defines it to be a LuaFunction
             } else if (m.isAnnotationPresent(LuaFunction.class)) {
-				MethodWrapper wrapper = new MethodWrapper(peripheral, m, m.getAnnotation(LuaFunction.class));
-				methods.add(wrapper);
-				names.add(wrapper.getLuaName());
-			}
+                LuaFunction annotation = m.getAnnotation(LuaFunction.class);
+                // extract the method name either from the annotation or the actual name
+                final String name = annotation.name().trim().isEmpty() ? m.getName() : annotation.name().trim();
+                // make sure it doesn't already exist
+                Preconditions.checkArgument(!methods.containsKey(name), "Duplicate method found " + name + ". Either make use of the name in the LuaFunction annotation, or if these methods do the same purpose use the Alias annotation instead.");
+                // wrap and store the method
+				final MethodWrapper wrapper = new MethodWrapper(peripheral, m);
+				methods.put(name, wrapper);
+                // add Alias references too
+                if (m.isAnnotationPresent(Alias.class)) {
+                    for (String alias : m.getAnnotation(Alias.class).value()) {
+                        Preconditions.checkArgument(!methods.containsKey(alias), "Duplicate method found while attempting to apply Alias " + alias);
+                        methods.put(alias, wrapper);
+                    }
+                }
+            // make sure the method isn't just annotated with the Alias annotation
+			} else if (m.isAnnotationPresent(Alias.class)) {
+                throw new RuntimeException("Alias annotations should only occur on LuaFunction annotated methods");
+            }
 		}
+
+        instance = peripheral;
+        peripheralType = pname;
         attach = attachMethod;
         detach = detachMethod;
-		methodNames = names.toArray(new String[names.size()]);
+		methodNames = (String[]) methods.keySet().toArray();
 	}
-
-    private boolean isAttachMethod(Method method) {
-        if (method.isAnnotationPresent(Attach.class)) {
-            Preconditions.checkArgument(!method.isAnnotationPresent(Detach.class), "Attach method cannot also be a Detach method");
-            Preconditions.checkArgument(!method.isAnnotationPresent(LuaFunction.class), "Attach method cannot also be a LuaFunction method");
-            return true;
-        }
-        return false;
-    }
-
-    private boolean isDetachMethod(Method method) {
-        if (method.isAnnotationPresent(Detach.class)) {
-            Preconditions.checkArgument(!method.isAnnotationPresent(Attach.class), "Detach method cannot also be an Attach method");
-            Preconditions.checkArgument(!method.isAnnotationPresent(LuaFunction.class), "Detach method cannot also be a LuaFunction method");
-            return true;
-        }
-        return false;
-    }
 
 	@Override
 	public String getType() {
@@ -134,27 +122,61 @@ public class PeripheralWrapper implements IPeripheral {
 	}
 
 	@Override
-	public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws Exception {
-		return methods.get(method).invoke(computer, context, arguments);
+	public Object[] callMethod(IComputerAccess computer, ILuaContext context, int methodIdx, Object[] arguments) throws Exception {
+        final String name = methodNames[methodIdx];
+        final MethodWrapper method = methods.get(name);
+        return method.invoke(computer, context, arguments);
 	}
 
 	@Override
 	public void attach(IComputerAccess computer) {
+        // try to invoke the defined attach method
         try {
             attach.invoke(instance, computer);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            if (attach != null) {
+                e.printStackTrace();
+            }
+        }
 	}
 
 	@Override
 	public void detach(IComputerAccess computer) {
+        // try to invoke the defined detach method
         try {
             detach.invoke(instance, computer);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            if (detach != null) {
+                e.printStackTrace();
+            }
+        }
 	}
 
+    /**
+     * dan200, what the hell does this do? and how does it differ from Javas native equals?
+     */
 	@Override
 	public boolean equals(IPeripheral other) {
 		return false;
 	}
 
+    private boolean isAttachMethod(Method method) {
+        if (method.isAnnotationPresent(Attach.class)) {
+            Preconditions.checkArgument(!method.isAnnotationPresent(Alias.class), "Attach method cannot have an alias");
+            Preconditions.checkArgument(!method.isAnnotationPresent(Detach.class), "Attach method cannot also be a Detach method");
+            Preconditions.checkArgument(!method.isAnnotationPresent(LuaFunction.class), "Attach method cannot also be a LuaFunction method");
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isDetachMethod(Method method) {
+        if (method.isAnnotationPresent(Detach.class)) {
+            Preconditions.checkArgument(!method.isAnnotationPresent(Alias.class), "Detach method cannot have an alias");
+            Preconditions.checkArgument(!method.isAnnotationPresent(Attach.class), "Detach method cannot also be an Attach method");
+            Preconditions.checkArgument(!method.isAnnotationPresent(LuaFunction.class), "Detach method cannot also be a LuaFunction method");
+            return true;
+        }
+        return false;
+    }
 }

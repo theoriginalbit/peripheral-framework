@@ -48,27 +48,19 @@ import dan200.computercraft.api.peripheral.IComputerAccess;
  */
 public class MethodWrapper {
 
-	private final String name;
 	private final Method method;
 	private final Class<?>[] javaParams;
 	private final Object instance;
 	
-	public MethodWrapper(Object peripheral, Method method, LuaFunction function) {
-		Preconditions.checkArgument(method.isAnnotationPresent(LuaFunction.class));
-		
+	public MethodWrapper(Object peripheral, Method m) {
+        // why? just 'cause
+		Preconditions.checkArgument(m.isAnnotationPresent(LuaFunction.class));
+
 		instance = peripheral;
-		this.method = method;
-		// get the name either from the LuaFunction name or the Java name
-        final String luaName = function.name();
-		name = (luaName.equals("") || luaName.trim().isEmpty()) ? method.getName() : function.name();
-		
+		method = m;
 		javaParams = method.getParameterTypes();
 	}
-	
-	public String getLuaName() {
-		return name;
-	}
-	
+
 	public Object[] invoke(IComputerAccess access, ILuaContext context, Object[] arguments) throws Exception {
         /*
          * TODO: validate number of args provided and throw an error when not enough are supplied,
