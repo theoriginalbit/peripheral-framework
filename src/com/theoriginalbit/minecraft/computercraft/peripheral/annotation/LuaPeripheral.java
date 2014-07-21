@@ -28,9 +28,10 @@ import java.lang.annotation.Target;
  */
 
 /**
- * Specifies that a TileEntity should be wrapped as a peripheral. It
- * should provide the peripheral type as well, this is what your mod
- * users will use to wrap your peripheral
+ * This annotation indicates that you would like your TileEntity to be
+ * wrapped as a peripheral. The "value" argument is required as it
+ * specifies the type of the peripheral when a player makes a call to
+ * peripheral.getType() in-game.
  *
  * @author theoriginalbit
  */

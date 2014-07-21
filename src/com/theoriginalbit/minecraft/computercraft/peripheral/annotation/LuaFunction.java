@@ -28,10 +28,7 @@ import java.lang.annotation.Target;
  */
 
 /**
- * Marks a Java method in your peripheral as a Lua accessible method,
- * you can optionally provide an alternative name for the function
- * through use of the value.
- * 
+ * Marks a Java method in your peripheral as a Lua accessible method.
  * @author theoriginalbit
  */
 @Target(ElementType.METHOD)
@@ -39,14 +36,14 @@ import java.lang.annotation.Target;
 public @interface LuaFunction {
 
     /**
-     * the name your function should appear as in Lua, if this is
-     * not set it will use the Java name
+     * This value will determine what the corresponding Lua function will be called. 
+     * By default, the Lua function will go by the same name as the method it is created from.
      */
     public String name() default "";
 
     /**
-     * If your method returns Object[] and you don't wish it to be
-     * converted, you must set this flag to true
+     * If your method returns an Object[] and you don't want it to be handled by
+     * the framework's automatic conversion utility, set this flag to true.
      */
     public boolean isMultiReturn() default false;
 
