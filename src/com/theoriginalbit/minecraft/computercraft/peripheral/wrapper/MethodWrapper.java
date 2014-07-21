@@ -49,8 +49,10 @@ import dan200.computercraft.api.peripheral.IComputerAccess;
 public class MethodWrapper {
 
 	private final Method method;
-	private final Class<?>[] javaParams;
 	private final Object instance;
+    private final int luaParamsCount;
+    private final Class<?>[] javaParams;
+    private final boolean isMultiReturn;
 	
 	public MethodWrapper(Object peripheral, Method m) {
         // why? just 'cause
@@ -59,45 +61,57 @@ public class MethodWrapper {
 		instance = peripheral;
 		method = m;
 		javaParams = method.getParameterTypes();
+        isMultiReturn = m.getAnnotation(LuaFunction.class).isMultiReturn();
+
+        // count how many parameters are required from Lua
+        int count = javaParams.length;
+        for (Class<?> clazz : javaParams) {
+            if (IComputerAccess.class.isAssignableFrom(clazz)) {
+                --count;
+            } else if (ILuaContext.class.isAssignableFrom(clazz)) {
+                --count;
+            }
+        }
+
+        luaParamsCount = count;
 	}
 
 	public Object[] invoke(IComputerAccess access, ILuaContext context, Object[] arguments) throws Exception {
-        /*
-         * TODO: validate number of args provided and throw an error when not enough are supplied,
-         * it must also allow for methods to define IComputerAccess as an argument type and not
-         * throw a # args error when it's not provided, since, you know, Lua-side cannot supply
-         * this, it instead must be provided from here.
-         *
-         * TODO: allow for multi-returns, so basically if I'm understanding correctly, if the method
-         * returns an Object[] then just loop through it, convert all it's members, and return it,
-         * otherwise convert the return value and wrap in an Object[]
-         *
-         * TODO: I'm sure there's lots more things that can be improved in this
-         */
+        // make sure they've provided enough args
+        Preconditions.checkArgument(arguments.length == luaParamsCount, String.format("invalid number of arguments, expected %d, got %d", luaParamsCount, arguments.length));
+
 		Object[] args = new Object[javaParams.length];
-		
 		for (int i = 0; i < args.length; ++i) {
-			if (arguments[i] == null) {
-				throw new Exception(String.format("expected %s, got nil", LuaType.getLuaName(javaParams[i])));
-			} else if (IComputerAccess.class.isAssignableFrom(javaParams[i])) {
+			if (IComputerAccess.class.isAssignableFrom(javaParams[i])) {
 				args[i] = access;
 			} else if (ILuaContext.class.isAssignableFrom(javaParams[i])) {
 				args[i] = context;
 			} else {
-				Object convert = LuaType.fromLua(arguments[i], javaParams[i]);
+				final Object convert = LuaType.fromLua(arguments[i], javaParams[i]);
 				Preconditions.checkArgument(convert != null, "expected %s, got %s", LuaType.getLuaName(javaParams[i]), LuaType.getLuaName(arguments[i].getClass()));
 				args[i] = convert;
 			}
 		}
 		
 		try {
-			return new Object[] { LuaType.toLua(method.invoke(instance, args)) };
+            if (isMultiReturn) {
+                // get the result
+                final Object[] result = (Object[]) method.invoke(instance, args);
+                // convert its inner members
+                for (int i = 0; i < result.length; ++i) {
+                    result[i] = LuaType.toLua(result[i]);
+                }
+                return result;
+            } else {
+                // return the result converted, if the method returns Object[] this will be converted to a Map
+                return new Object[] { LuaType.toLua(method.invoke(instance, args)) };
+            }
 		} catch (IllegalAccessException e) {
 			throw new Exception("Developer problem, IllegalAccessException " + e.getMessage());
 		} catch (IllegalArgumentException e) {
 			throw new Exception("Developer problem, IllegalArgumentException " + e.getMessage());
 		} catch (InvocationTargetException e) {
-			String message = null;
+			String message;
 			Throwable cause = e;
 			while ((message = cause.getMessage()) == null
 					&& (cause = cause.getCause()) != null) {}
