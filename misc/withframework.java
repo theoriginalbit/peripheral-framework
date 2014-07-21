@@ -63,6 +63,7 @@ public class MonitorPeripheral {
     }
 
     @LuaFunction
+    @Alias("setTextColor")
     public void setTextColour(int colour) {
         colour = TermAPI.parseColour(colour, m_monitor.getTerminal().isColour());
         Terminal terminal = m_monitor.getTerminal().getTerminal();
@@ -70,30 +71,17 @@ public class MonitorPeripheral {
     }
 
     @LuaFunction
-    public void setTextColor(int colour) {
-        setTextColour(colour);
-    }
-
-    @LuaFunction
+    @Alias("setBackgroundColor")
     public void setBackgroundColour(int colour) {
         colour = TermAPI.parseColour(colour, m_monitor.getTerminal().isColour());
         Terminal terminal = m_monitor.getTerminal().getTerminal();
         terminal.setBackgroundColour(colour);
     }
 
-    @LuaFunction
-    public void setBackgroundColor(int colour) {
-        setBackgroundColour(colour)
-    }
-
+    @Alias("isColor")
     @LuaFunction
     public boolean isColour() {
         return new m_monitor.getTerminal().isColour();
-    }
-
-    @LuaFunction
-    public boolean isColor() {
-        return isColour()
     }
 
     @Attach
