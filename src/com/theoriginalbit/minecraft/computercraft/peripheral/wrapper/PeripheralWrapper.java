@@ -2,6 +2,7 @@ package com.theoriginalbit.minecraft.computercraft.peripheral.wrapper;
 
 import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
+import java.util.Set;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
@@ -109,7 +110,8 @@ public class PeripheralWrapper implements IPeripheral {
         peripheralType = pname;
         attach = attachMethod;
         detach = detachMethod;
-		methodNames = (String[]) methods.keySet().toArray();
+        Set<String> keys = methods.keySet();
+		methodNames = keys.toArray(new String[keys.size()]);
 	}
 
 	@Override
