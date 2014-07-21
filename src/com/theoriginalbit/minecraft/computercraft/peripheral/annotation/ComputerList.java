@@ -39,4 +39,4 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Computers {}
+public @interface ComputerList {}

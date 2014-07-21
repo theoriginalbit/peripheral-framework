@@ -55,7 +55,7 @@ public final class ComputerCraftAPI
 	 * Use createUniqueNumberedSaveDir() to create a new numbered folder to use.
 	 * @param capacity The ammount of data that can be stored in the directory before it fills up, in bytes.
 	 * @return The mount, or null if it could be created for some reason. Use IComputerAccess.mount() or IComputerAccess.mountWritable()
-	 * to mount this on a Computers' file system.
+	 * to mount this on a ComputerList' file system.
 	 * @see #createUniqueNumberedSaveDir(World, String)
 	 * @see dan200.computercraft.api.peripheral.IComputerAccess#mount(String, dan200.computercraft.api.filesystem.IMount)
 	 * @see dan200.computercraft.api.peripheral.IComputerAccess#mountWritable(String, dan200.computercraft.api.filesystem.IWritableMount)
@@ -84,7 +84,7 @@ public final class ComputerCraftAPI
 	 * @param domain The domain under which to look for resources. eg: "mymod"
 	 * @param subPath The domain under which to look for resources. eg: "mymod/lua/myfiles"
 	 * @return The mount, or null if it could be created for some reason. Use IComputerAccess.mount() or IComputerAccess.mountWritable()
-	 * to mount this on a Computers' file system.
+	 * to mount this on a ComputerList' file system.
 	 * @see dan200.computercraft.api.peripheral.IComputerAccess#mount(String, dan200.computercraft.api.filesystem.IMount)
 	 * @see dan200.computercraft.api.peripheral.IComputerAccess#mountWritable(String, IWritableMount)
 	 * @see dan200.computercraft.api.filesystem.IMount

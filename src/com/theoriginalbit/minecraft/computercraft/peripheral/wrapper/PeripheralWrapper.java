@@ -92,7 +92,7 @@ public class PeripheralWrapper implements IPeripheral {
 
         // check for the @Computer fields and assign them to this instances computer list
         for (Field f : peripheralClass.getDeclaredFields()) {
-            if (f.isAnnotationPresent(Computers.class)) {
+            if (f.isAnnotationPresent(ComputerList.class)) {
                 try {
                     f.set(peripheral, computers);
                 } catch (IllegalAccessException e) {

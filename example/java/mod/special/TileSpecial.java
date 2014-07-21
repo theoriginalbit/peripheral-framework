@@ -154,7 +154,7 @@ public class TileSpecial extends TileEntity {
      * peripheral, these attached computers are maintained by the Peripheral-Framework, thus
      * you do not even need to assign this variable to anything.
      */
-    @Computers
+    @ComputerList
     public ArrayList<IComputerAccess> computers;
 
     /**
