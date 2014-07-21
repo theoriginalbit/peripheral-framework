@@ -13,7 +13,7 @@ An open-source framework that has the aim of allowing developers to implement th
 What Makes it Good?
 -------------
 
-The Peripheral Framework provides numerous advantages for both developers and users when it comes to making a peripheral. To fully appreciate just how much Peripheral Framework can do for you, take a look at a [side-by-side comparison](#nyi) between a native implementation of monitors and the simplified peripheral framework implementation. 
+The Peripheral Framework provides numerous advantages for both developers and users when it comes to making a peripheral. To fully appreciate just how much Peripheral Framework can do for you, take a look at a [side-by-side comparison](https://theoriginalbit.github.io/Peripheral-Framework/comparison.html) between a native implementation of monitors and the simplified peripheral framework implementation. 
 
 Below is a compiled list of the many things that this framework does to make your life easier.
 
