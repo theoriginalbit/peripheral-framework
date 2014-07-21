@@ -7,6 +7,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.*;
 
+import cpw.mods.fml.common.Loader;
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
@@ -82,7 +83,7 @@ public class PeripheralWrapper implements IPeripheral {
                 Preconditions.checkArgument(IComputerAccess.class.isAssignableFrom(params[0]), "Invalid argument on Detach method should be IComputerAccess");
                 detachMethod = m;
             // if the method defines it to be a LuaFunction, and it is specified to be enabled
-            } else if (m.isAnnotationPresent(LuaFunction.class) && m.getAnnotation(LuaFunction.class).isEnabled()) {
+            } else if (m.isAnnotationPresent(LuaFunction.class) && isEnabled(m)) {
                 LuaFunction annotation = m.getAnnotation(LuaFunction.class);
                 // extract the method name either from the annotation or the actual name
                 final String name = annotation.name().trim().isEmpty() ? m.getName() : annotation.name().trim();
@@ -177,6 +178,24 @@ public class PeripheralWrapper implements IPeripheral {
             Preconditions.checkArgument(!method.isAnnotationPresent(LuaFunction.class), "Detach method cannot also be a LuaFunction method");
             return true;
         }
+        return false;
+    }
+
+    private boolean isEnabled(Method method) {
+        // get the mod ids specified that this method should be enabled for
+        final String[] modIds = method.getAnnotation(LuaFunction.class).modIds();
+        // if there are not mod ids, then we should enable this
+        if (modIds.length == 0) {
+            return true;
+        }
+        // loop through the mod ids and see if any are present
+        for (String mid : modIds) {
+            // if one was present, load
+            if (Loader.isModLoaded(mid)) {
+                return true;
+            }
+        }
+        // mods are specified, none are present, this method shouldn't load
         return false;
     }
 

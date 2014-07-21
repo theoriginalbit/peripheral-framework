@@ -112,6 +112,25 @@ public class TileSpecial extends TileEntity {
     }
 
     /**
+     * You can specify if you want your method to only be accessible from Lua when certain
+     * mods are installed.
+     */
+    @LuaFunction(modIds = "BuildCraft|Core")
+    public void consumePower() {
+        System.out.println("BuildCraft is installed, consuming its power");
+    }
+
+    /**
+     * You can even specify a list of mods that can be installed for your method to be
+     * enabled. The method below will only be enabled if BuildCraft or ThermalExpansion
+     * are installed.
+     */
+    @LuaFunction(modIds = {"BuildCraft|Core", "ThermalExpansion"})
+    public void consumeLotsOfPower() {
+        System.out.println("BuildCraft and/or ThermalExpansion is installed, consuming all the power");
+    }
+
+    /**
      * Not all methods in a peripheral have to be registered, this is just a normal method
      * you can use, but it will not be accessible in Lua
      */

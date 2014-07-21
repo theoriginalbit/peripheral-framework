@@ -48,9 +48,9 @@ public @interface LuaFunction {
     public boolean isMultiReturn() default false;
 
     /**
-     * Use this to disable your method under certain circumstances, a common example
-     * would be to only enable a particular method if a certain mod is installed
+     * Use this to only enable this method when certain mods are found installed in
+     * this Minecraft instance, these values should be the Mod's ID
      */
-    public boolean isEnabled() default true;
+    public String[] modIds() default {};
 
 }
