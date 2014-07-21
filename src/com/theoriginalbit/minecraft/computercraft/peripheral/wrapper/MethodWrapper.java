@@ -78,7 +78,7 @@ public class MethodWrapper {
 
 	public Object[] invoke(IComputerAccess access, ILuaContext context, Object[] arguments) throws Exception {
         // make sure they've provided enough args
-        Preconditions.checkArgument(arguments.length == luaParamsCount, String.format("invalid number of arguments, expected %d, got %d", luaParamsCount, arguments.length));
+        Preconditions.checkArgument(arguments.length == luaParamsCount, String.format("expected %d arg(s), got %d", luaParamsCount, arguments.length));
 
 		Object[] args = new Object[javaParams.length];
 		for (int i = 0; i < args.length; ++i) {
@@ -107,9 +107,11 @@ public class MethodWrapper {
                 return new Object[] { LuaType.toLua(method.invoke(instance, args)) };
             }
 		} catch (IllegalAccessException e) {
-			throw new Exception("Developer problem, IllegalAccessException " + e.getMessage());
+            e.printStackTrace();
+			throw new Exception("Developer problem, please present your client log file to the developer of this peripheral.");
 		} catch (IllegalArgumentException e) {
-			throw new Exception("Developer problem, IllegalArgumentException " + e.getMessage());
+            e.printStackTrace();
+			throw new Exception("Developer problem, please present your client log file to the developer of this peripheral.");
 		} catch (InvocationTargetException e) {
 			String message;
 			Throwable cause = e;
