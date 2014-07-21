@@ -81,8 +81,8 @@ public class PeripheralWrapper implements IPeripheral {
                 Preconditions.checkArgument(params.length == 1, "Detach methods should only have one argument; IComputerAccess");
                 Preconditions.checkArgument(IComputerAccess.class.isAssignableFrom(params[0]), "Invalid argument on Detach method should be IComputerAccess");
                 detachMethod = m;
-            // if the method defines it to be a LuaFunction
-            } else if (m.isAnnotationPresent(LuaFunction.class)) {
+            // if the method defines it to be a LuaFunction, and it is specified to be enabled
+            } else if (m.isAnnotationPresent(LuaFunction.class) && m.getAnnotation(LuaFunction.class).isEnabled()) {
                 LuaFunction annotation = m.getAnnotation(LuaFunction.class);
                 // extract the method name either from the annotation or the actual name
                 final String name = annotation.name().trim().isEmpty() ? m.getName() : annotation.name().trim();
@@ -179,4 +179,5 @@ public class PeripheralWrapper implements IPeripheral {
         }
         return false;
     }
+
 }
