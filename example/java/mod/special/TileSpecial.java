@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * This class must then define methods it wishes to be accessible in Lua with the LuaFunction annotation.
  *
  * If you wish your peripheral to know when a computer is attached or detached from your peripheral, you
- * must define a method with the Attach and Detach annotations respectively. Note: you may only define
+ * must define a method with the OnAttach and OnDetach annotations respectively. Note: you may only define
  * one of each method!
  *
  * It is suggested that you annotate your TileEntities with OpenPeripheral's Ignore annotation so that if
@@ -157,7 +157,7 @@ public class TileSpecial extends TileEntity {
      * The method can be named anything you want, as long as it has the annotation it will
      * be invoked when a computer is attached to your peripheral
      */
-    @Attach
+    @OnAttach
     public void attach(IComputerAccess computer) {
         if (!computers.contains(computer)) {
             computers.add(computer);
@@ -168,7 +168,7 @@ public class TileSpecial extends TileEntity {
      * The method can be named anything you want, as long as it has the annotation it will
      * be invoked when a computer is detached from your peripheral
      */
-    @Detach
+    @OnDetach
     public void detach(IComputerAccess computer) {
         if (computers.contains(computer)) {
             computers.remove(computer);

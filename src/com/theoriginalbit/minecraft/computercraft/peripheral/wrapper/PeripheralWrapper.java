@@ -38,8 +38,8 @@ import dan200.computercraft.api.peripheral.IPeripheral;
 /**
  * This wraps the object annotated with LuaPeripheral that is supplied to
  * it from the Peripheral Provider, it will then wrap any methods annotated
- * with LuaFunction and retain references of methods annotated with Attach
- * and Detach so that your peripheral will function with ComputerCraft's
+ * with LuaFunction and retain references of methods annotated with OnAttach
+ * and OnDetach so that your peripheral will function with ComputerCraft's
  * expected IPeripheral interface.
  *
  * IMPORTANT:
@@ -71,17 +71,17 @@ public class PeripheralWrapper implements IPeripheral {
 		for (Method m : peripheralClass.getMethods()) {
             // if the method defines it to be an attach
             if (isAttachMethod(m)) {
-                Preconditions.checkArgument(attachMethod == null, "Duplicate methods found annotated with Attach, a peripheral can only define one Attach method");
+                Preconditions.checkArgument(attachMethod == null, "Duplicate methods found annotated with OnAttach, a peripheral can only define one OnAttach method");
                 Class<?>[] params = m.getParameterTypes();
-                Preconditions.checkArgument(params.length == 1, "Attach methods should only have one argument; IComputerAccess");
-                Preconditions.checkArgument(IComputerAccess.class.isAssignableFrom(params[0]), "Invalid argument on Attach method should be IComputerAccess");
+                Preconditions.checkArgument(params.length == 1, "OnAttach methods should only have one argument; IComputerAccess");
+                Preconditions.checkArgument(IComputerAccess.class.isAssignableFrom(params[0]), "Invalid argument on OnAttach method should be IComputerAccess");
                 attachMethod = m;
             // if the method defines it to be a detach
             } else if (isDetachMethod(m)) {
-                Preconditions.checkArgument(detachMethod == null, "Duplicate methods found annotated with Detach, a peripheral can only define one Detach method");
+                Preconditions.checkArgument(detachMethod == null, "Duplicate methods found annotated with OnDetach, a peripheral can only define one OnDetach method");
                 Class<?>[] params = m.getParameterTypes();
-                Preconditions.checkArgument(params.length == 1, "Detach methods should only have one argument; IComputerAccess");
-                Preconditions.checkArgument(IComputerAccess.class.isAssignableFrom(params[0]), "Invalid argument on Detach method should be IComputerAccess");
+                Preconditions.checkArgument(params.length == 1, "OnDetach methods should only have one argument; IComputerAccess");
+                Preconditions.checkArgument(IComputerAccess.class.isAssignableFrom(params[0]), "Invalid argument on OnDetach method should be IComputerAccess");
                 detachMethod = m;
             // if the method defines it to be a LuaFunction, and it is specified to be enabled
             } else if (m.isAnnotationPresent(LuaFunction.class) && isEnabled(m)) {
@@ -164,20 +164,20 @@ public class PeripheralWrapper implements IPeripheral {
 	}
 
     private boolean isAttachMethod(Method method) {
-        if (method.isAnnotationPresent(Attach.class)) {
-            Preconditions.checkArgument(!method.isAnnotationPresent(Alias.class), "Attach method cannot have an alias");
-            Preconditions.checkArgument(!method.isAnnotationPresent(Detach.class), "Attach method cannot also be a Detach method");
-            Preconditions.checkArgument(!method.isAnnotationPresent(LuaFunction.class), "Attach method cannot also be a LuaFunction method");
+        if (method.isAnnotationPresent(OnAttach.class)) {
+            Preconditions.checkArgument(!method.isAnnotationPresent(Alias.class), "OnAttach method cannot have an alias");
+            Preconditions.checkArgument(!method.isAnnotationPresent(OnDetach.class), "OnAttach method cannot also be a OnDetach method");
+            Preconditions.checkArgument(!method.isAnnotationPresent(LuaFunction.class), "OnAttach method cannot also be a LuaFunction method");
             return true;
         }
         return false;
     }
 
     private boolean isDetachMethod(Method method) {
-        if (method.isAnnotationPresent(Detach.class)) {
-            Preconditions.checkArgument(!method.isAnnotationPresent(Alias.class), "Detach method cannot have an alias");
-            Preconditions.checkArgument(!method.isAnnotationPresent(Attach.class), "Detach method cannot also be an Attach method");
-            Preconditions.checkArgument(!method.isAnnotationPresent(LuaFunction.class), "Detach method cannot also be a LuaFunction method");
+        if (method.isAnnotationPresent(OnDetach.class)) {
+            Preconditions.checkArgument(!method.isAnnotationPresent(Alias.class), "OnDetach method cannot have an alias");
+            Preconditions.checkArgument(!method.isAnnotationPresent(OnAttach.class), "OnDetach method cannot also be an OnAttach method");
+            Preconditions.checkArgument(!method.isAnnotationPresent(LuaFunction.class), "OnDetach method cannot also be a LuaFunction method");
             return true;
         }
         return false;

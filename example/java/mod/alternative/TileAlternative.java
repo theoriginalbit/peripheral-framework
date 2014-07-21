@@ -6,8 +6,8 @@ import net.minecraft.tileentity.TileEntity;
 /**
  * This TileEntity behaves a little different to TileSpecial, this one defines an external
  * peripheral which it provides to the PeripheralProvider through the use of the
- * ILuaPeripheralProvider annotation. Any annotations (LuaPeripheral, LuaFunction, Attach,
- * Detach) within this TileEntity are ignored so you must define them within the peripheral.
+ * ILuaPeripheralProvider annotation. Any annotations (LuaPeripheral, LuaFunction, OnAttach,
+ * OnDetach) within this TileEntity are ignored so you must define them within the peripheral.
  *
  * @author theoriginalbit
  */
