@@ -1,4 +1,4 @@
-package mod.standard;
+package mod.special;
 
 import com.google.common.collect.Lists;
 import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.*;

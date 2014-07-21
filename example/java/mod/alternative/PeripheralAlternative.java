@@ -2,6 +2,7 @@ package mod.alternative;
 
 import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaFunction;
 import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaPeripheral;
+
 import mod.ExampleMod;
 import net.minecraft.item.ItemStack;
 

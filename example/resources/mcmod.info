@@ -1,0 +1,16 @@
+[
+    {
+        "modid": "ExampleMod",
+        "name": "ExampleMod",
+        "description": "An example mod for using the Peripheral-Framework",
+        "version": "1.0",
+        "url": "",
+        "updateUrl": "",
+        "authors": [
+            "theoriginalbit"
+        ],
+        "credits": "Created by Joshua Asbury (@theoriginalbit)",
+        "dependencies": [
+        ]
+    }
+]

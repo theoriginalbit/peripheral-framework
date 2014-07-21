@@ -11,10 +11,9 @@ import dan200.computercraft.api.ComputerCraftAPI;
 import mod.alternative.BlockAlternative;
 import mod.alternative.TileAlternative;
 import mod.converter.ConverterItemStack;
-import mod.standard.BlockSpecial;
-import mod.standard.TileSpecial;
+import mod.special.BlockSpecial;
+import mod.special.TileSpecial;
 import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -36,12 +35,12 @@ public class ExampleMod {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         // This block details the standard way you would define a peripheral
-        blockSpecial = new BlockSpecial().setCreativeTab(CreativeTabs.tabBlock);
+        blockSpecial = new BlockSpecial();
         GameRegistry.registerBlock(blockSpecial, "Special Block");
         GameRegistry.registerTileEntity(TileSpecial.class, "Special Tile");
 
         // This block details another way you could define your peripherals
-        blockAlternative = new BlockAlternative().setCreativeTab(CreativeTabs.tabBlock);
+        blockAlternative = new BlockAlternative();
         GameRegistry.registerBlock(blockAlternative, "Alternative Block");
         GameRegistry.registerTileEntity(TileAlternative.class, "Alternative Tile");
 
