@@ -1,10 +1,7 @@
 package mod.standard;
 
 import com.google.common.collect.Lists;
-import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.Attach;
-import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.Detach;
-import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaFunction;
-import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaPeripheral;
+import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.*;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import net.minecraft.tileentity.TileEntity;
 
@@ -64,6 +61,26 @@ public class TileSpecial extends TileEntity {
     }
 
     /**
+     * You can also provide additional names for your methods using the Alias annotation,
+     * your method will be accessible in Lua by both the native Java name, as well as the
+     * name in the Alias annotation
+     */
+    @Alias("isColour")
+    @LuaFunction
+    public boolean isColor() {
+        return true;
+    }
+
+    /**
+     * You can even do multiple Aliases if you'd like
+     */
+    @Alias({"b", "c"})
+    @LuaFunction
+    public boolean a() {
+        return true;
+    }
+
+    /**
      * What if you need a reference to the computer that is invoking the method?
      * Sure, that's fine too. You can also get the ILuaContext if you want it
      * as well.
@@ -92,6 +109,14 @@ public class TileSpecial extends TileEntity {
     @LuaFunction(isMultiReturn = true)
     public Object[] getSomethingElse() {
         return new Object[]{ true, "This is a multi-return" };
+    }
+
+    /**
+     * Not all methods in a peripheral have to be registered, this is just a normal method
+     * you can use, but it will not be accessible in Lua
+     */
+    public void fooBar() {
+        System.out.println("Foo bar!");
     }
 
     // A list you can use to track all the computers attached to this peripheral
