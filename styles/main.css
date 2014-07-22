@@ -1,8 +1,129 @@
-.jumbotron {
-    position: relative;
-    top: 35px;
+html, body {
+    width: 100%;
+    height: 100%;
+    
+    font-family: "Helvetica Neue", Helvetica, Arial, "sans-serif";
 }
 
-.jumbotron h1 {
+.container {
+    width: 80%;
+    position: absolute;
+    left: 10%;
+}
+
+.pull-left {
+    float: left;
+}
+
+.pull-right {
+    float: right;
+}
+
+/* Default text stuff */
+
+a[href] {
+    color: #428bca;
+    text-decoration: none;
+}
+
+a[href]:hover {
+    color: #3876a7;
+}
+
+/* Buttons and stuff */
+
+a[href].button {
+    margin-right: 5px;
+    
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 6px;
+    color: #428bca;
+    position: relative;
+    top: 20px;
+    right: 13px;
+    padding: 10px;
+}
+
+
+/* Header stuff */
+.header {
+    height: 60px;
+    
+    border-radius: 2px;
+    padding-left: 15px;
+    padding-right: 15px;
+    
+    border-bottom: solid;
+    border-bottom-width: 1px;
+    border-color: #ddd;
+}
+
+.header h3 {
+    position: relative;
+    top: -10px;
+    color: #777;
+    font-size: 1.5em;
+}
+
+.header a:hover {
+    background: #eee;
+}
+
+.header a.active {
+    background: #428bca;
+    color: #fff;
+}
+
+/* Intro */
+
+.intro {
+    margin-left: auto;
+    margin-right: auto;
+    
+    width: 70%;
+    border-radius: 10px;
+    
+    background: #eee;
+    
+    margin-top: 30px;
+    padding: 50px 50px 30px 30px;
+}
+
+.intro h1 {
     text-align: center;
+    color: #333;
+    font-size: 3em;
+}
+
+.intro p {
+    color: #555;
+    text-align: justify;
+    font-size: 1.35em;
+    line-height: 1.55em;
+}
+
+.intro a[href].button {
+    position: relative;
+    
+    top: -5px;
+    
+    display: block;
+    
+    background: #5ac46a;
+    color: #fff;
+    width: 180px;
+    height: 30px;
+    text-align: center;
+    
+    margin-left: auto;
+    margin-right: auto;
+    vertical-align: middle;
+    
+    font-size: 1.5em;
+    font-weight: 300;
+}
+
+.intro .button:hover {
+    background: #6ac46a;
 }
