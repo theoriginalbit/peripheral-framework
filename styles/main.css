@@ -87,6 +87,7 @@ a[href].button {
     background: #eee;
     
     margin-top: 30px;
+    margin-bottom: 30px;
     padding: 50px 50px 30px 30px;
 }
 
@@ -127,3 +128,20 @@ a[href].button {
 .intro .button:hover {
     background: #6ac46a;
 }
+
+/* Columns: the-why and the-how */
+
+.newspaper {
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.the-why, .the-how {
+    width: 48%;
+    text-align: justify;
+}
+
+.the-why { float: left; }
+
+.the-how { float: right; }
