@@ -1,0 +1,8 @@
+.jumbotron {
+    position: relative;
+    top: 35px;
+}
+
+.jumbotron h1 {
+    text-align: center;
+}
