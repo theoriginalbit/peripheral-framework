@@ -3,6 +3,7 @@ html, body {
     height: 100%;
     
     font-family: "Helvetica Neue", Helvetica, Arial, "sans-serif";
+    color: #333; /* A slightly nicer shade of black */
 }
 
 .container {
@@ -107,13 +108,14 @@ a[href].button {
 .intro a[href].button {
     position: relative;
     
+    left: 10px;
     top: -5px;
     
     display: block;
     
     background: #5ac46a;
     color: #fff;
-    width: 180px;
+    width: 200px;
     height: 30px;
     text-align: center;
     
@@ -122,26 +124,56 @@ a[href].button {
     vertical-align: middle;
     
     font-size: 1.5em;
-    font-weight: 300;
+    font-weight: 350;
 }
 
-.intro .button:hover {
-    background: #6ac46a;
+.intro sup {
+    font-size: 0.6em;
 }
 
 /* Columns: the-why and the-how */
 
 .newspaper {
-    width: 70%;
+    width: 75%;
     margin-left: auto;
     margin-right: auto;
 }
 
 .the-why, .the-how {
-    width: 48%;
+    background: #fafafa;
+    line-height: 1.5em;
+    border-radius: 6px;
+    padding-left: 14px;
+    padding-right: 14px;
+    width: 46%;
     text-align: justify;
+    margin-bottom: 70px;
+}
+
+.the-why h3, .the-how h3 {
+    color: #838383;
 }
 
 .the-why { float: left; }
 
 .the-how { float: right; }
+
+
+/* Footers and stuffs */
+
+.footer {
+    border-top-color: #ddd;
+    border-top-style: solid;
+    border-width: 1px;
+    
+    height: 40px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+}
+
+.footer p {
+    color: #999;
+    position: relative;
+    top: -5px;
+}
