@@ -2,14 +2,11 @@ package mod;
 
 import com.theoriginalbit.minecraft.computercraft.peripheral.LuaType;
 import com.theoriginalbit.minecraft.computercraft.peripheral.PeripheralProvider;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.FMLLaunchHandler;
 import dan200.computercraft.api.ComputerCraftAPI;
 import mod.alternative.BlockAlternative;
 import mod.alternative.TileAlternative;
@@ -17,11 +14,7 @@ import mod.converter.ConverterItemStack;
 import mod.special.BlockSpecial;
 import mod.special.TileSpecial;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
-
-import java.io.File;
-import java.io.IOException;
 
 /**
  * This is your main mod class.
