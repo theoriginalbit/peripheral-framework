@@ -2,9 +2,7 @@ package com.theoriginalbit.minecraft.computercraft.peripheral.wrapper;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Set;
+import java.util.*;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
@@ -53,10 +51,15 @@ import dan200.computercraft.api.peripheral.IPeripheral;
  */
 public class PeripheralWrapper implements IPeripheral {
 
+    private static HashMap<Integer, Integer> mountMap = Maps.newHashMap();
+
+    private final Object instance;
     private final String peripheralType;
     private final LinkedHashMap<String, MethodWrapper> methods = Maps.newLinkedHashMap();
 	private final String[] methodNames;
     private final ArrayList<IComputerAccess> computers = Lists.newArrayList();
+    private final Method onMount;
+    private final Method onUnmount;
 
     public PeripheralWrapper(Object peripheral) {
 		final Class<?> peripheralClass = peripheral.getClass();
@@ -66,26 +69,19 @@ public class PeripheralWrapper implements IPeripheral {
         final String pname = peripheralLua.value().trim();
         Preconditions.checkArgument(!pname.isEmpty(), "Peripheral name cannot be an empty string");
 
+        Method mount = null;
+        Method unmount = null;
+
 		for (Method m : peripheralClass.getMethods()) {
-            // if the method defines it to be a LuaFunction, and it is specified to be enabled
-            if (m.isAnnotationPresent(LuaFunction.class) && isEnabled(m)) {
-                LuaFunction annotation = m.getAnnotation(LuaFunction.class);
-                // extract the method name either from the annotation or the actual name
-                final String name = annotation.name().trim().isEmpty() ? m.getName() : annotation.name().trim();
-                // make sure it doesn't already exist
-                Preconditions.checkArgument(!methods.containsKey(name), "Duplicate method found " + name + ". Either make use of the name in the LuaFunction annotation, or if these methods do the same purpose use the Alias annotation instead.");
-                // wrap and store the method
-				final MethodWrapper wrapper = new MethodWrapper(peripheral, m);
-				methods.put(name, wrapper);
-                // add Alias references too
-                if (m.isAnnotationPresent(Alias.class)) {
-                    for (String alias : m.getAnnotation(Alias.class).value()) {
-                        Preconditions.checkArgument(!methods.containsKey(alias), "Duplicate method found while attempting to apply Alias " + alias);
-                        methods.put(alias, wrapper);
-                    }
-                }
-            // make sure the method isn't just annotated with the Alias annotation
-			} else if (m.isAnnotationPresent(Alias.class)) {
+            if (isMountMethod(m)) {
+                Preconditions.checkArgument(mount == null, "Mount.OnMount annotation should only be defined once in a peripheral");
+                mount = m;
+            } else if (isUnmountMethod(m)) {
+                Preconditions.checkArgument(unmount == null, "Mount.OnMount annotation should only be defined once in a peripheral");
+                unmount = m;
+            } else if (isEnabledLuaFunction(m)) {
+                wrapMethod(peripheral, m);
+            } else if (m.isAnnotationPresent(Alias.class)) {
                 throw new RuntimeException("Alias annotations should only occur on LuaFunction annotated methods");
             }
 		}
@@ -101,12 +97,15 @@ public class PeripheralWrapper implements IPeripheral {
             }
         }
 
+        instance = peripheral;
         peripheralType = pname;
         Set<String> keys = methods.keySet();
 		methodNames = keys.toArray(new String[keys.size()]);
+        onMount = mount;
+        onUnmount = unmount;
 	}
 
-	@Override
+    @Override
 	public String getType() {
 		return peripheralType;
 	}
@@ -128,6 +127,22 @@ public class PeripheralWrapper implements IPeripheral {
         if (!computers.contains(computer)) {
             computers.add(computer);
         }
+
+        if (onMount == null) {
+            return;
+        }
+
+        int id = computer.getID();
+        int mountCount = 0;
+        if (mountMap.containsKey(id)) {
+            mountCount = mountMap.get(id);
+        }
+        try {
+            onMount.invoke(instance, computer);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        mountMap.put(id, ++mountCount);
 	}
 
 	@Override
@@ -135,6 +150,25 @@ public class PeripheralWrapper implements IPeripheral {
         if (computers.contains(computer)) {
             computers.remove(computer);
         }
+
+        if (onUnmount == null) {
+            return;
+        }
+
+        int id = computer.getID();
+        int mountCount = 0;
+        if (mountMap.containsKey(id)) {
+            mountCount = mountMap.get(id);
+        }
+        if (--mountCount < 1) {
+            mountCount = 0;
+            try {
+                onUnmount.invoke(instance, computer);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        mountMap.put(id, mountCount);
 	}
 
     /**
@@ -145,7 +179,29 @@ public class PeripheralWrapper implements IPeripheral {
         return other != null && other instanceof PeripheralWrapper && other == this;
 	}
 
-    private boolean isEnabled(Method method) {
+    private void wrapMethod(Object peripheral, Method method) {
+        LuaFunction annotation = method.getAnnotation(LuaFunction.class);
+        // extract the method name either from the annotation or the actual name
+        final String name = annotation.name().trim().isEmpty() ? method.getName() : annotation.name().trim();
+        // make sure it doesn't already exist
+        Preconditions.checkArgument(!methods.containsKey(name), "Duplicate method found " + name + ". Either make use of the name in the LuaFunction annotation, or if these methods do the same purpose use the Alias annotation instead.");
+        // wrap and store the method
+        final MethodWrapper wrapper = new MethodWrapper(peripheral, method);
+        methods.put(name, wrapper);
+        // add Alias references too
+        if (method.isAnnotationPresent(Alias.class)) {
+            for (String alias : method.getAnnotation(Alias.class).value()) {
+                Preconditions.checkArgument(!methods.containsKey(alias), "Duplicate method found while attempting to apply Alias " + alias);
+                methods.put(alias, wrapper);
+            }
+        }
+    }
+
+    private boolean isEnabledLuaFunction(Method method) {
+        if (!method.isAnnotationPresent(LuaFunction.class)) {
+            return false;
+        }
+
         // get the mod ids specified that this method should be enabled for
         final String[] modIds = method.getAnnotation(LuaFunction.class).modIds();
         // if there are not mod ids, then we should enable this
@@ -160,6 +216,24 @@ public class PeripheralWrapper implements IPeripheral {
             }
         }
         // mods are specified, none are present, this method shouldn't load
+        return false;
+    }
+
+    private boolean isUnmountMethod(Method method) {
+        if (method.isAnnotationPresent(OnUnmount.class)) {
+            Preconditions.checkArgument(!method.isAnnotationPresent(LuaFunction.class), "OnMount method cannot also be annotated with LuaFunction");
+            Preconditions.checkArgument(!method.isAnnotationPresent(Alias.class), "OnMount method cannot also be annotated with Alias");
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isMountMethod(Method method) {
+        if (method.isAnnotationPresent(OnMount.class)) {
+            Preconditions.checkArgument(!method.isAnnotationPresent(LuaFunction.class), "OnUnmount method cannot also be annotated with LuaFunction");
+            Preconditions.checkArgument(!method.isAnnotationPresent(Alias.class), "OnUnmount method cannot also be annotated with Alias");
+            return true;
+        }
         return false;
     }
 

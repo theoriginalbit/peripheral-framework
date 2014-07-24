@@ -1,7 +1,5 @@
 package com.theoriginalbit.minecraft.computercraft.peripheral.annotation;
 
-import dan200.computercraft.api.filesystem.IMount;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -30,18 +28,14 @@ import java.lang.annotation.Target;
  */
 
 /**
- * Specifies that the annotated method will handle the {@link dan200.computercraft.api.peripheral.IPeripheral#attach(dan200.computercraft.api.peripheral.IComputerAccess)}
- * method on your {@link com.theoriginalbit.minecraft.computercraft.peripheral.annotation.LuaPeripheral} annotated {@link net.minecraft.tileentity.TileEntity}.
- * This does not stop the peripheral wrapper from maintaining your
- * Computer list, it however provides you with a way to add resource
- * mounts to computers when your peripheral is attached
+ * This annotation specifies a method to handle unmounting of a IMount
+ * to the computer.
+ *
+ * NOTE: This is only invoked when the last peripheral from your mod
+ * is detached to the computer.
  *
  * @author theoriginalbit
  */
-@Target(ElementType.TYPE)
+@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface OnAttach {
-
-    public Class<? extends IMount>[] value();
-
-}
+public @interface OnUnmount {}
