@@ -1,0 +1,1 @@
+print"This is a program mounted from the ExampleMod"

@@ -2,6 +2,7 @@ package mod.special;
 
 import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.*;
 import dan200.computercraft.api.peripheral.IComputerAccess;
+import mod.ExampleMod;
 import net.minecraft.tileentity.TileEntity;
 
 import java.util.ArrayList;
@@ -165,5 +166,15 @@ public class TileSpecial extends TileEntity {
         for (IComputerAccess c : computers) {
             c.queueEvent(s, new Object[0]);
         }
+    }
+
+    @OnMount
+    public void mount(IComputerAccess computer) {
+        computer.mount("example", ExampleMod.mount);
+    }
+
+    @OnUnmount
+    public void unmount(IComputerAccess computer) {
+        computer.unmount("example");
     }
 }
