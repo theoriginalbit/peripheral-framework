@@ -1,9 +1,4 @@
-package com.theoriginalbit.minecraft.computercraft.peripheral.annotation;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+package com.theoriginalbit.minecraft.framework.peripheral;
 
 /**
  * Peripheral Framework is an open-source framework that has the aim of
@@ -28,16 +23,20 @@ import java.lang.annotation.Target;
  */
 
 /**
- * Marks that you wish the LuaFunction to appear under multiple names
- * Lua-side. This would be commonly used to provide different spellings
- * of the method name, for example `isColor` and `isColour`.
+ * In the event that you don't want to have your peripheral implementation
+ * in your TileEntity you can implement this interface and return an object
+ * that is an instance of your peripheral implementation.
+ *
+ * See the example program for usage
  *
  * @author theoriginalbit
  */
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Alias {
+public interface ILuaPeripheralProvider {
 
-    String[] value() default {};
+    /**
+     * @return an instance of an object which is annotated with
+     * LuaPeripheral and pertains to your TileEntity
+     */
+    public Object getPeripheral();
 
 }

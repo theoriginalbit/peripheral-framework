@@ -1,15 +1,10 @@
-package com.theoriginalbit.minecraft.computercraft.peripheral.annotation;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
 /**
  * Peripheral Framework is an open-source framework that has the aim of
  * allowing developers to implement their ComputerCraft peripherals faster,
  * easier, and cleaner; allowing them to focus more on developing their
  * content.
+ *
+ * URL: https://github.com/theoriginalbit/Peripheral-Framework
  *
  * Copyright (C) 2014  Joshua Asbury (@theoriginalbit)
  *
@@ -27,15 +22,7 @@ import java.lang.annotation.Target;
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 
-/**
- * This annotation specifies a method to handle mounting of a IMount
- * to the computer.
- *
- * NOTE: This is only invoked when the first peripheral from your mod
- * is attached to the computer.
- *
- * @author theoriginalbit
- */
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface OnMount {}
+@API(apiVersion = "1.1", owner = "MoarPeripherals", provides = "Peripheral-Framework|Converter")
+package com.theoriginalbit.minecraft.framework.peripheral.converter;
+
+import cpw.mods.fml.common.API;

@@ -1,4 +1,4 @@
-package com.theoriginalbit.minecraft.computercraft.peripheral.wrapper;
+package com.theoriginalbit.minecraft.framework.peripheral.wrapper;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -7,8 +7,9 @@ import java.util.*;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.theoriginalbit.minecraft.computercraft.peripheral.annotation.*;
 
+import com.theoriginalbit.minecraft.framework.peripheral.annotation.*;
+import com.theoriginalbit.minecraft.framework.peripheral.interfaces.IPFMount;
 import cpw.mods.fml.common.Loader;
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.peripheral.IComputerAccess;
@@ -53,13 +54,11 @@ public class PeripheralWrapper implements IPeripheral {
 
     private static HashMap<Integer, Integer> mountMap = Maps.newHashMap();
 
-    private final Object instance;
     private final String peripheralType;
     private final LinkedHashMap<String, MethodWrapper> methods = Maps.newLinkedHashMap();
 	private final String[] methodNames;
     private final ArrayList<IComputerAccess> computers = Lists.newArrayList();
-    private final Method onMount;
-    private final Method onUnmount;
+    private final ArrayList<IPFMount> mounts = Lists.newArrayList();
 
     public PeripheralWrapper(Object peripheral) {
 		final Class<?> peripheralClass = peripheral.getClass();
@@ -69,17 +68,8 @@ public class PeripheralWrapper implements IPeripheral {
         final String pname = peripheralLua.value().trim();
         Preconditions.checkArgument(!pname.isEmpty(), "Peripheral name cannot be an empty string");
 
-        Method mount = null;
-        Method unmount = null;
-
 		for (Method m : peripheralClass.getMethods()) {
-            if (isMountMethod(m)) {
-                Preconditions.checkArgument(mount == null, "Mount.OnMount annotation should only be defined once in a peripheral");
-                mount = m;
-            } else if (isUnmountMethod(m)) {
-                Preconditions.checkArgument(unmount == null, "Mount.OnMount annotation should only be defined once in a peripheral");
-                unmount = m;
-            } else if (isEnabledLuaFunction(m)) {
+            if (isEnabledLuaFunction(m)) {
                 wrapMethod(peripheral, m);
             } else if (m.isAnnotationPresent(Alias.class)) {
                 throw new RuntimeException("Alias annotations should only occur on LuaFunction annotated methods");
@@ -97,12 +87,21 @@ public class PeripheralWrapper implements IPeripheral {
             }
         }
 
-        instance = peripheral;
+        // Build the specified mount classes
+        for (Class<? extends IPFMount> clazz : peripheralLua.mounts()) {
+            IPFMount mount;
+            try {
+                mount = clazz.newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+                continue;
+            }
+            mounts.add(mount);
+        }
+
         peripheralType = pname;
         Set<String> keys = methods.keySet();
 		methodNames = keys.toArray(new String[keys.size()]);
-        onMount = mount;
-        onUnmount = unmount;
 	}
 
     @Override
@@ -128,7 +127,7 @@ public class PeripheralWrapper implements IPeripheral {
             computers.add(computer);
         }
 
-        if (onMount == null) {
+        if (mounts.isEmpty()) {
             return;
         }
 
@@ -137,10 +136,8 @@ public class PeripheralWrapper implements IPeripheral {
         if (mountMap.containsKey(id)) {
             mountCount = mountMap.get(id);
         }
-        try {
-            onMount.invoke(instance, computer);
-        } catch (Exception e) {
-            e.printStackTrace();
+        for (IPFMount mount : mounts) {
+            computer.mount(mount.getMountLocation(), mount);
         }
         mountMap.put(id, ++mountCount);
 	}
@@ -151,7 +148,7 @@ public class PeripheralWrapper implements IPeripheral {
             computers.remove(computer);
         }
 
-        if (onUnmount == null) {
+        if (mounts.isEmpty()) {
             return;
         }
 
@@ -162,10 +159,8 @@ public class PeripheralWrapper implements IPeripheral {
         }
         if (--mountCount < 1) {
             mountCount = 0;
-            try {
-                onUnmount.invoke(instance, computer);
-            } catch (Exception e) {
-                e.printStackTrace();
+            for (IPFMount mount : mounts) {
+                computer.unmount(mount.getMountLocation());
             }
         }
         mountMap.put(id, mountCount);
@@ -216,24 +211,6 @@ public class PeripheralWrapper implements IPeripheral {
             }
         }
         // mods are specified, none are present, this method shouldn't load
-        return false;
-    }
-
-    private boolean isUnmountMethod(Method method) {
-        if (method.isAnnotationPresent(OnUnmount.class)) {
-            Preconditions.checkArgument(!method.isAnnotationPresent(LuaFunction.class), "OnMount method cannot also be annotated with LuaFunction");
-            Preconditions.checkArgument(!method.isAnnotationPresent(Alias.class), "OnMount method cannot also be annotated with Alias");
-            return true;
-        }
-        return false;
-    }
-
-    private boolean isMountMethod(Method method) {
-        if (method.isAnnotationPresent(OnMount.class)) {
-            Preconditions.checkArgument(!method.isAnnotationPresent(LuaFunction.class), "OnUnmount method cannot also be annotated with LuaFunction");
-            Preconditions.checkArgument(!method.isAnnotationPresent(Alias.class), "OnUnmount method cannot also be annotated with Alias");
-            return true;
-        }
         return false;
     }
 

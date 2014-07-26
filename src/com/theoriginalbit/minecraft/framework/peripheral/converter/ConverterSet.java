@@ -1,4 +1,11 @@
-package com.theoriginalbit.minecraft.computercraft.peripheral.converter;
+package com.theoriginalbit.minecraft.framework.peripheral.converter;
+
+import java.util.Map;
+import java.util.Set;
+
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import com.theoriginalbit.minecraft.framework.peripheral.LuaType;
 
 /**
  * Peripheral Framework is an open-source framework that has the aim of
@@ -23,23 +30,28 @@ package com.theoriginalbit.minecraft.computercraft.peripheral.converter;
  */
 
 /**
- * Converts a String to/from Lua, it also acts as a catch-all,
- * converting anything that hasn't been converted, as such
- * this is the last conversion to happen
+ * Converts a {@link java.util.Set} to/from Lua
  *
  * @author theoriginalbit
  */
-public class ConverterString implements ITypeConverter {
+public class ConverterSet implements ITypeConverter {
 	@Override
 	public Object fromLua(Object obj, Class<?> expected) {
-		if (expected == String.class) {
-			return obj.toString();
+		if (obj instanceof Map && expected == Set.class) {
+			return Sets.newHashSet(((Map<?, ?>) obj).keySet());
 		}
 		return null;
 	}
 
 	@Override
 	public Object toLua(Object obj) {
-		return obj.toString(); // catch-all
+		if (obj instanceof Set) {
+			Map<Object, Boolean> result = Maps.newHashMap();
+			for (Object o : (Set<?>) obj) {
+				result.put(LuaType.toLua(o), true);
+			}
+			return result;
+		}
+		return null;
 	}
 }

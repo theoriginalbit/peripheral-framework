@@ -1,10 +1,9 @@
-package com.theoriginalbit.minecraft.computercraft.peripheral.converter;
+package com.theoriginalbit.minecraft.framework.peripheral.annotation;
 
-import java.util.Map;
-import java.util.Map.Entry;
-
-import com.google.common.collect.Maps;
-import com.theoriginalbit.minecraft.computercraft.peripheral.LuaType;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * Peripheral Framework is an open-source framework that has the aim of
@@ -29,30 +28,15 @@ import com.theoriginalbit.minecraft.computercraft.peripheral.LuaType;
  */
 
 /**
- * Converts a {@link java.util.Map} to/from Lua
+ * Specifies your list for the attached IComputerAccess instances. When
+ * computers are attached or detached from your peripheral this list
+ * will be updated by the peripheral wrapper, this means you can count
+ * on this list always having an up-to-date list of computers attached.
+ * You may use this list however you wish, though a common usage would
+ * be to queue events to all computers.
  *
  * @author theoriginalbit
  */
-public class ConverterMap implements ITypeConverter {
-	@Override
-	public Object fromLua(Object obj, Class<?> expected) {
-		if (obj instanceof Map && expected == Map.class) {
-			return obj;
-		}
-		return null;
-	}
-
-	@Override
-	public Object toLua(Object obj) {
-		if (obj instanceof Map) {
-			Map<Object, Object> map = Maps.newHashMap();
-			for (Entry<?, ?> e : ((Map<?, ?>) obj).entrySet()) {
-				Object k = LuaType.toLua(e.getKey());
-				Object v = LuaType.toLua(e.getValue());
-				map.put(k, v);
-			}
-			return map;
-		}
-		return null;
-	}
-}
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ComputerList {}

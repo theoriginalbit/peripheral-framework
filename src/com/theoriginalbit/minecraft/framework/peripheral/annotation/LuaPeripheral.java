@@ -1,9 +1,13 @@
-package com.theoriginalbit.minecraft.computercraft.peripheral.annotation;
+package com.theoriginalbit.minecraft.framework.peripheral.annotation;
+
+import com.theoriginalbit.minecraft.framework.peripheral.interfaces.IPFMount;
+import dan200.computercraft.api.filesystem.IMount;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.Map;
 
 /**
  * Peripheral Framework is an open-source framework that has the aim of
@@ -28,29 +32,19 @@ import java.lang.annotation.Target;
  */
 
 /**
- * Marks a Java method in your peripheral as a Lua accessible method.
+ * This annotation indicates that you would like your TileEntity to be
+ * wrapped as a peripheral. The "value" argument is required as it
+ * specifies the type of the peripheral when a player makes a call to
+ * peripheral.getType() in-game.
+ *
  * @author theoriginalbit
  */
-@Target(ElementType.METHOD)
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface LuaFunction {
+public @interface LuaPeripheral {
 
-    /**
-     * This value will determine what the corresponding Lua function will be called. 
-     * By default, the Lua function will go by the same name as the method it is created from.
-     */
-    public String name() default "";
+    public String value();
 
-    /**
-     * If your method returns an Object[] and you don't want it to be handled by
-     * the framework's automatic conversion utility, set this flag to true.
-     */
-    public boolean isMultiReturn() default false;
-
-    /**
-     * Use this to only enable this method when certain mods are found installed in
-     * this Minecraft instance, these values should be the Mod's ID
-     */
-    public String[] modIds() default {};
+    public Class<? extends IPFMount>[] mounts() default {};
 
 }

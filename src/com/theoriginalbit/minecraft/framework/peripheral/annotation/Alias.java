@@ -1,10 +1,15 @@
+package com.theoriginalbit.minecraft.framework.peripheral.annotation;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 /**
  * Peripheral Framework is an open-source framework that has the aim of
  * allowing developers to implement their ComputerCraft peripherals faster,
  * easier, and cleaner; allowing them to focus more on developing their
  * content.
- *
- * URL: https://github.com/theoriginalbit/Peripheral-Framework
  *
  * Copyright (C) 2014  Joshua Asbury (@theoriginalbit)
  *
@@ -22,7 +27,17 @@
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 
-@API(apiVersion = "1.0", owner = "MoarPeripherals", provides = "Peripheral-Framework|Core")
-package com.theoriginalbit.minecraft.computercraft.peripheral;
+/**
+ * Marks that you wish the LuaFunction to appear under multiple names
+ * Lua-side. This would be commonly used to provide different spellings
+ * of the method name, for example `isColor` and `isColour`.
+ *
+ * @author theoriginalbit
+ */
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Alias {
 
-import cpw.mods.fml.common.API;
+    String[] value() default {};
+
+}
