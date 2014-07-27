@@ -1,7 +1,7 @@
 package mod.converter;
 
 import com.google.common.collect.Maps;
-import com.theoriginalbit.minecraft.computercraft.peripheral.converter.ITypeConverter;
+import com.theoriginalbit.minecraft.framework.peripheral.converter.ITypeConverter;
 import net.minecraft.item.ItemStack;
 
 import java.util.Map;

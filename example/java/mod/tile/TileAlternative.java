@@ -1,6 +1,6 @@
-package mod.alternative;
+package mod.tile;
 
-import com.theoriginalbit.minecraft.computercraft.peripheral.ILuaPeripheralProvider;
+import com.theoriginalbit.minecraft.framework.peripheral.ILuaPeripheralProvider;
 import net.minecraft.tileentity.TileEntity;
 
 /**
