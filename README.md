@@ -1,7 +1,7 @@
 Peripheral Framework
 ====================
 
-**IMPORTANT! This framework is intended for ComputerCraft 1.63 and any subsequent versions which make use of the same API**
+**IMPORTANT! This framework is intended for ComputerCraft 1.65 and any subsequent versions which make use of the same API**
 
 
 Purpose
@@ -44,4 +44,4 @@ Users should not need to install this framework as developers should bundle it w
 License
 -------
 
-The Peripheral-Framework developed by Joshua Asbury (@theoriginalbit) is distributed under the terms of the GPLv3 License, which can be found under the name LICENSE in the distribution.
+The Peripheral-Framework developed by Joshua Asbury (@theoriginalbit) is distributed under the terms of the Apache License version 2, which can be found under the name LICENSE in the distribution.
