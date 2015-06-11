@@ -18,7 +18,7 @@ package com.theoriginalbit.framework.peripheral.wrapper;
 import com.google.common.base.Preconditions;
 import com.theoriginalbit.framework.peripheral.LuaType;
 import com.theoriginalbit.framework.peripheral.api.lua.Function;
-import com.theoriginalbit.framework.peripheral.api.lua.MultiReturn;
+import com.theoriginalbit.framework.peripheral.api.util.MultiReturn;
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.peripheral.IComputerAccess;
@@ -55,7 +55,7 @@ public class WrapperMethod {
         instance = peripheral;
         method = m;
         javaParams = method.getParameterTypes();
-        isMultiReturn = m.isAnnotationPresent(MultiReturn.class);
+        isMultiReturn = method.getReturnType().isAssignableFrom(MultiReturn.class);
 
         // count how many parameters are required from Lua
         int count = javaParams.length;
@@ -96,7 +96,7 @@ public class WrapperMethod {
         try {
             if (isMultiReturn) {
                 // get the result
-                final Object[] result = (Object[]) method.invoke(instance, args);
+                final Object[] result = ((MultiReturn) method.invoke(instance, args)).getValues();
                 // convert its inner members
                 for (int i = 0; i < result.length; ++i) {
                     result[i] = LuaType.toLua(result[i]);
