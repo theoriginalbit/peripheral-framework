@@ -16,8 +16,9 @@
 package com.theoriginalbit.framework.peripheral;
 
 import com.google.common.base.Preconditions;
-import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
-import com.theoriginalbit.framework.peripheral.annotation.Requires;
+import com.theoriginalbit.framework.peripheral.api.peripheral.IPeripheralHolder;
+import com.theoriginalbit.framework.peripheral.api.peripheral.Peripheral;
+import com.theoriginalbit.framework.peripheral.api.require.Requires;
 import com.theoriginalbit.framework.peripheral.wrapper.WrapperComputer;
 import cpw.mods.fml.common.Loader;
 import dan200.computercraft.api.peripheral.IPeripheral;
@@ -64,11 +65,11 @@ public final class PeripheralProvider implements IPeripheralProvider {
         WrapperComputer wrapper = null;
 
         // does the TileEntity specify that it provides an external peripheral
-        if (tile instanceof ILuaPeripheralProvider) {
+        if (tile instanceof IPeripheralHolder) {
             // it was an ILuaPeripheralProvider, why is there a LuaPeripheral annotation present?
             Preconditions.checkArgument(!isLuaPeripheral(tile), "Peripherals cannot implement ILuaPeripheralProvider and have the LuaPeripheral annotation present");
             // get the peripheral from the ILuaPeripheralProvider
-            final Object peripheral = ((ILuaPeripheralProvider) tile).getPeripheral();
+            final Object peripheral = ((IPeripheralHolder) tile).getPeripheral();
             // make sure the provided peripheral is annotated
             Preconditions.checkArgument(isLuaPeripheral(peripheral), "The peripheral returned from the ILuaPeripheralProvider was not annotated with LuaPeripheral");
             // wrap the return
@@ -89,13 +90,13 @@ public final class PeripheralProvider implements IPeripheralProvider {
     }
 
     private static boolean isLuaPeripheral(Object peripheral) {
-        return peripheral.getClass().isAnnotationPresent(LuaPeripheral.class);
+        return peripheral.getClass().isAnnotationPresent(Peripheral.class);
     }
 
     private static boolean isEnabledLuaPeripheral(Object peripheral) {
         final Class<?> clazz = peripheral.getClass();
         // if there is no annotation, it's not a valid peripheral
-        if (!clazz.isAnnotationPresent(LuaPeripheral.class)) {
+        if (!clazz.isAnnotationPresent(Peripheral.class)) {
             return false;
         }
         // if there is no Requires annotation we can assume it should always be enabled

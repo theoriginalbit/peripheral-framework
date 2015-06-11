@@ -15,8 +15,8 @@
  */
 package com.theoriginalbit.framework.peripheral.turtle;
 
-import com.theoriginalbit.framework.peripheral.exception.TurtleFailureAttack;
-import com.theoriginalbit.framework.peripheral.exception.TurtleFailureDig;
+import com.theoriginalbit.framework.peripheral.api.util.TurtleAttackException;
+import com.theoriginalbit.framework.peripheral.api.util.TurtleDigException;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.turtle.*;
 import net.minecraft.block.Block;
@@ -94,15 +94,15 @@ public abstract class UpgradeTool implements ITurtleUpgrade {
 
     protected abstract boolean canAttackEntity(Entity entity);
 
-    protected abstract ArrayList<ItemStack> attackEntity(ITurtleAccess turtle, Entity entity) throws TurtleFailureAttack;
+    protected abstract ArrayList<ItemStack> attackEntity(ITurtleAccess turtle, Entity entity) throws TurtleAttackException;
 
     protected abstract boolean canAttackBlock(World world, int x, int y, int z, int dir, EntityPlayer turtle);
 
-    protected abstract ArrayList<ItemStack> attackBlock(World world, int x, int y, int z, int dir, EntityPlayer turtle) throws TurtleFailureAttack;
+    protected abstract ArrayList<ItemStack> attackBlock(World world, int x, int y, int z, int dir, EntityPlayer turtle) throws TurtleAttackException;
 
     protected abstract boolean canHarvestBlock(World world, int x, int y, int z);
 
-    protected abstract ArrayList<ItemStack> harvestBlock(World world, int x, int y, int z) throws TurtleFailureDig;
+    protected abstract ArrayList<ItemStack> harvestBlock(World world, int x, int y, int z) throws TurtleDigException;
 
     protected String getAttackFailureMessage() {
         return "Nothing to attack";
@@ -178,7 +178,7 @@ public abstract class UpgradeTool implements ITurtleUpgrade {
             }
 
             return TurtleCommandResult.failure(getAttackFailureMessage());
-        } catch (TurtleFailureAttack e) {
+        } catch (TurtleAttackException e) {
             return TurtleCommandResult.failure(e.getMessage());
         }
     }
@@ -200,7 +200,7 @@ public abstract class UpgradeTool implements ITurtleUpgrade {
                     world.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(block) + world.getBlockMetadata(x, y, z) * 4096);
                     return TurtleCommandResult.success();
                 }
-            } catch (TurtleFailureDig e) {
+            } catch (TurtleDigException e) {
                 return TurtleCommandResult.failure(e.getMessage());
             }
         }

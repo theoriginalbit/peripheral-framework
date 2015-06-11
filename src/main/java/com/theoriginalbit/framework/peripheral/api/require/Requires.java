@@ -13,7 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@API(apiVersion = "1.2", owner = "MoarPeripherals", provides = "Peripheral-Framework|Interfaces")
-package com.theoriginalbit.framework.peripheral.turtle;
+package com.theoriginalbit.framework.peripheral.api.require;
 
-import cpw.mods.fml.common.API;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+/**
+ * Use this to only enable a peripheral or method when certain mods are found installed in
+ * the Minecraft instance, the values should be Mod IDs
+ *
+ * @author theoriginalbit
+ * @since 8/11/14
+ */
+@Target({ElementType.TYPE, ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Requires {
+    String[] modIds();
+
+    boolean allRequired() default false;
+}

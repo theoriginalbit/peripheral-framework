@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.theoriginalbit.framework.peripheral.annotation;
+package com.theoriginalbit.framework.peripheral.api.event;
 
-import com.theoriginalbit.framework.peripheral.interfaces.IPFMount;
+import com.theoriginalbit.framework.peripheral.api.filesystem.IMount;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -33,7 +33,6 @@ import java.lang.annotation.Target;
  * @author theoriginalbit
  */
 public class Computers {
-
     @Target(ElementType.FIELD)
     @Retention(RetentionPolicy.RUNTIME)
     public @interface List {
@@ -52,7 +51,6 @@ public class Computers {
     @Target(ElementType.TYPE)
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Mount {
-        public Class<? extends IPFMount>[] value();
+        Class<? extends IMount>[] value();
     }
-
 }

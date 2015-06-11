@@ -19,6 +19,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.theoriginalbit.framework.peripheral.LuaType;
+import com.theoriginalbit.framework.peripheral.api.converter.ITypeConverter;
 import dan200.computercraft.api.lua.LuaException;
 
 import java.util.HashMap;

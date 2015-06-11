@@ -17,8 +17,8 @@ package com.theoriginalbit.framework.peripheral.wrapper;
 
 import com.google.common.base.Preconditions;
 import com.theoriginalbit.framework.peripheral.LuaType;
-import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
-import com.theoriginalbit.framework.peripheral.annotation.function.MultiReturn;
+import com.theoriginalbit.framework.peripheral.api.lua.Function;
+import com.theoriginalbit.framework.peripheral.api.lua.MultiReturn;
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.peripheral.IComputerAccess;
@@ -50,7 +50,7 @@ public class WrapperMethod {
 
     public WrapperMethod(Object peripheral, Method m) {
         // why? just 'cause
-        Preconditions.checkArgument(m.isAnnotationPresent(LuaFunction.class));
+        Preconditions.checkArgument(m.isAnnotationPresent(Function.class));
 
         instance = peripheral;
         method = m;

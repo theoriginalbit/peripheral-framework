@@ -17,8 +17,8 @@ package com.theoriginalbit.framework.peripheral.wrapper;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.theoriginalbit.framework.peripheral.annotation.Computers;
-import com.theoriginalbit.framework.peripheral.interfaces.IPFMount;
+import com.theoriginalbit.framework.peripheral.api.event.Computers;
+import com.theoriginalbit.framework.peripheral.api.filesystem.IMount;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 
 import java.lang.reflect.InvocationTargetException;
@@ -40,7 +40,7 @@ import java.util.HashMap;
  */
 public class WrapperComputer extends WrapperGeneric {
     private static final HashMap<Integer, Integer> MOUNT_COUNTS = Maps.newHashMap();
-    private final ArrayList<IPFMount> mounts = Lists.newArrayList();
+    private final ArrayList<IMount> mounts = Lists.newArrayList();
 
     public WrapperComputer(Object peripheral) {
         super(peripheral);
@@ -50,9 +50,9 @@ public class WrapperComputer extends WrapperGeneric {
             final Computers.Mount annotationMount = peripheralClass.getAnnotation(Computers.Mount.class);
 
             // Build the specified mount classes
-            for (Class<? extends IPFMount> clazz : annotationMount.value()) {
+            for (Class<? extends IMount> clazz : annotationMount.value()) {
                 try {
-                    final IPFMount mount = clazz.newInstance();
+                    final IMount mount = clazz.newInstance();
                     mounts.add(mount);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -90,7 +90,7 @@ public class WrapperComputer extends WrapperGeneric {
         // perform the mount if needed
         int count = MOUNT_COUNTS.get(id);
         if (count++ == 0) {
-            for (IPFMount mount : mounts) {
+            for (IMount mount : mounts) {
                 computer.mount(mount.getMountLocation(), mount);
             }
         }
@@ -127,7 +127,7 @@ public class WrapperComputer extends WrapperGeneric {
         // if it was the last peripheral mounted to the computer, un-mount the mounts
         int count = MOUNT_COUNTS.get(id);
         if (--count == 0) {
-            for (IPFMount mount : mounts) {
+            for (IMount mount : mounts) {
                 computer.unmount(mount.getMountLocation());
             }
         }

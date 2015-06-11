@@ -13,7 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@API(apiVersion = "1.2", owner = "MoarPeripherals", provides = "Peripheral-Framework|Exception")
-package com.theoriginalbit.framework.peripheral.exception;
+package com.theoriginalbit.framework.peripheral.api.util;
 
-import cpw.mods.fml.common.API;
+/**
+ * @author theoriginalbit
+ * @since 14/11/14
+ */
+public class TurtleAttackException extends Exception {
+    public TurtleAttackException(String reason) {
+        super(reason);
+    }
+}

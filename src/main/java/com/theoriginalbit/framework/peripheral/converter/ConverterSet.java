@@ -18,6 +18,7 @@ package com.theoriginalbit.framework.peripheral.converter;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.theoriginalbit.framework.peripheral.LuaType;
+import com.theoriginalbit.framework.peripheral.api.converter.ITypeConverter;
 import dan200.computercraft.api.lua.LuaException;
 
 import java.util.Map;

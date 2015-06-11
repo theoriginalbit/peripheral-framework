@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.theoriginalbit.framework.peripheral.converter;
+package com.theoriginalbit.framework.peripheral.api.converter;
 
 import dan200.computercraft.api.lua.LuaException;
 
@@ -38,7 +38,6 @@ import dan200.computercraft.api.lua.LuaException;
  * @author theoriginalbit
  */
 public interface ITypeConverter {
-
     /**
      * Convert the object from a Lua object to a Java object for use
      * in LuaFunctions. Return null if you don't provide conversion
@@ -48,7 +47,7 @@ public interface ITypeConverter {
      * @param expected the class type of the argument, i.e. String.class
      * @return your Java object or null if you don't convert
      */
-	public Object fromLua(Object obj, Class<?> expected) throws LuaException;
+	Object fromLua(Object obj, Class<?> expected) throws LuaException;
 
     /**
      * Convert the object from a Java object to a Lua object for
@@ -58,6 +57,5 @@ public interface ITypeConverter {
      * @param obj the object from the method call return
      * @return the Lua object or null if you don't convert
      */
-	public Object toLua(Object obj) throws LuaException;
-
+	Object toLua(Object obj) throws LuaException;
 }

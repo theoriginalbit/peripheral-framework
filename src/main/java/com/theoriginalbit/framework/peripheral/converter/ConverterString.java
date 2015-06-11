@@ -15,6 +15,8 @@
  */
 package com.theoriginalbit.framework.peripheral.converter;
 
+import com.theoriginalbit.framework.peripheral.api.converter.ITypeConverter;
+
 /**
  * Converts a String to/from Lua, it also acts as a catch-all,
  * converting anything that hasn't been converted, as such

@@ -13,7 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@API(apiVersion = "1.2", owner = "MoarPeripherals", provides = "Peripheral-Framework|Converter")
-package com.theoriginalbit.framework.peripheral.converter;
+package com.theoriginalbit.framework.peripheral.api.peripheral;
 
-import cpw.mods.fml.common.API;
+/**
+ * In the event that you don't want to have your peripheral implementation
+ * in your TileEntity you can implement this interface and return an object
+ * that is an instance of your peripheral implementation.
+ *
+ * See the example program for usage
+ *
+ * @author theoriginalbit
+ */
+public interface IPeripheralHolder {
+    /**
+     * @return an instance of an object which is annotated with
+     * LuaPeripheral and pertains to your TileEntity
+     */
+    Object getPeripheral();
+}

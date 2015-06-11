@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.theoriginalbit.framework.peripheral.annotation;
+package com.theoriginalbit.framework.peripheral.api.peripheral;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -30,8 +30,6 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface LuaPeripheral {
-
-    public String value();
-
+public @interface Peripheral {
+    String value();
 }

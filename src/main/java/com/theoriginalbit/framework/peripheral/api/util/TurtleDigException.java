@@ -13,7 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@API(apiVersion = "1.2", owner = "MoarPeripherals", provides = "Peripheral-Framework|Wrapper")
-package com.theoriginalbit.framework.peripheral.wrapper;
+package com.theoriginalbit.framework.peripheral.api.util;
 
-import cpw.mods.fml.common.API;
+/**
+ * @author theoriginalbit
+ * @since 14/11/14
+ */
+public class TurtleDigException extends Exception {
+    public TurtleDigException(String reason) {
+        super(reason);
+    }
+}

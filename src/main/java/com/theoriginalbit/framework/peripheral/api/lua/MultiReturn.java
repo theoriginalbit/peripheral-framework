@@ -13,7 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@API(apiVersion = "1.2", owner = "MoarPeripherals", provides = "Peripheral-Framework|Interfaces")
-package com.theoriginalbit.framework.peripheral.interfaces;
+package com.theoriginalbit.framework.peripheral.api.lua;
 
-import cpw.mods.fml.common.API;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+/**
+ * If your method returns an Object[] and you don't want it to be handled by
+ * the framework's automatic conversion utility, set this flag to true.
+ *
+ * @author theoriginalbit
+ * @since 8/11/14
+ */
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface MultiReturn {
+}

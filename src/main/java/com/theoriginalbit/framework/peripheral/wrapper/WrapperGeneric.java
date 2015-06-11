@@ -18,11 +18,11 @@ package com.theoriginalbit.framework.peripheral.wrapper;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.theoriginalbit.framework.peripheral.annotation.Computers;
-import com.theoriginalbit.framework.peripheral.annotation.LuaPeripheral;
-import com.theoriginalbit.framework.peripheral.annotation.Requires;
-import com.theoriginalbit.framework.peripheral.annotation.function.Alias;
-import com.theoriginalbit.framework.peripheral.annotation.function.LuaFunction;
+import com.theoriginalbit.framework.peripheral.api.event.Computers;
+import com.theoriginalbit.framework.peripheral.api.lua.Function;
+import com.theoriginalbit.framework.peripheral.api.peripheral.Peripheral;
+import com.theoriginalbit.framework.peripheral.api.require.Requires;
+import com.theoriginalbit.framework.peripheral.api.lua.Alias;
 import cpw.mods.fml.common.Loader;
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.lua.LuaException;
@@ -53,7 +53,7 @@ class WrapperGeneric implements IPeripheral {
 
     public WrapperGeneric(Object peripheral) {
         final Class<?> peripheralClass = peripheral.getClass();
-        final LuaPeripheral peripheralLua = peripheralClass.getAnnotation(LuaPeripheral.class);
+        final Peripheral peripheralLua = peripheralClass.getAnnotation(Peripheral.class);
 
         // validate the peripheral type
         final String pname = peripheralLua.value().trim();
@@ -160,7 +160,7 @@ class WrapperGeneric implements IPeripheral {
     }
 
     private void wrapMethod(Object peripheral, Method method) {
-        final LuaFunction annotation = method.getAnnotation(LuaFunction.class);
+        final Function annotation = method.getAnnotation(Function.class);
         // extract the method name either from the annotation or the actual name
         final String name = annotation.value().trim().isEmpty() ? method.getName() : annotation.value().trim();
         // make sure it doesn't already exist
@@ -179,7 +179,7 @@ class WrapperGeneric implements IPeripheral {
 
     private boolean isEnabledLuaFunction(Method method) {
         // if there is no annotation, we ignore it
-        if (!method.isAnnotationPresent(LuaFunction.class)) {
+        if (!method.isAnnotationPresent(Function.class)) {
             return false;
         }
         // if there is no Requires annotation we can assume it should always be enabled

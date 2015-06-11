@@ -17,6 +17,7 @@ package com.theoriginalbit.framework.peripheral.converter;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
+import com.theoriginalbit.framework.peripheral.api.converter.ITypeConverter;
 
 /**
  * Converts primitive wrappers to/from Lua

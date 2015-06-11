@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.theoriginalbit.framework.peripheral.annotation;
+package com.theoriginalbit.framework.peripheral.api.lua;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -21,16 +21,14 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Use this to only enable a peripheral or method when certain mods are found installed in
- * the Minecraft instance, the values should be Mod IDs
+ * Marks that you wish the LuaFunction to appear under multiple names
+ * Lua-side. This would be commonly used to provide different spellings
+ * of the method name, for example `isColor` and `isColour`.
  *
  * @author theoriginalbit
- * @since 8/11/14
  */
-@Target({ElementType.TYPE, ElementType.METHOD})
+@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Requires {
-    public String[] modIds();
-
-    public boolean allRequired() default false;
+public @interface Alias {
+    String[] value();
 }

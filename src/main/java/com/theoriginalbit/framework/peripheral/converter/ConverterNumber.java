@@ -15,6 +15,8 @@
  */
 package com.theoriginalbit.framework.peripheral.converter;
 
+import com.theoriginalbit.framework.peripheral.api.converter.ITypeConverter;
+
 /**
  * Converts a number to/from Lua
  *
