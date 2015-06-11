@@ -16,9 +16,11 @@
 package com.theoriginalbit.framework.peripheral.wrapper;
 
 import com.google.common.base.Preconditions;
-import com.theoriginalbit.framework.peripheral.LuaType;
+import com.theoriginalbit.framework.peripheral.PeripheralFramework;
+import com.theoriginalbit.framework.peripheral.api.converter.IConversionRegistry;
 import com.theoriginalbit.framework.peripheral.api.lua.Function;
 import com.theoriginalbit.framework.peripheral.api.util.MultiReturn;
+import com.theoriginalbit.framework.peripheral.api.util.TypeConversionException;
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.peripheral.IComputerAccess;
@@ -70,27 +72,27 @@ public class WrapperMethod {
         luaParamsCount = count;
     }
 
-    public Object[] invoke(IComputerAccess access, ILuaContext context, Object[] arguments) throws LuaException, InterruptedException {
+    public Object[] invoke(IComputerAccess access, ILuaContext context, Object[] arguments) throws LuaException {
         // make sure they've provided enough args
         if (arguments.length != luaParamsCount) {
             throw new LuaException(String.format("expected %d arg(s), got %d", luaParamsCount, arguments.length));
         }
 
         Object[] args = new Object[javaParams.length];
-        for (int i = 0; i < args.length; ++i) {
-            if (IComputerAccess.class.isAssignableFrom(javaParams[i])) {
-                args[i] = access;
-            } else if (ILuaContext.class.isAssignableFrom(javaParams[i])) {
-                args[i] = context;
-            } else if (arguments[i] != null) {
-                final Object convert = LuaType.fromLua(arguments[i], javaParams[i]);
-                if (convert == null) {
-                    throw new LuaException(String.format("expected %s, got %s", LuaType.getLuaName(javaParams[i]), LuaType.getLuaName(arguments[i].getClass())));
+        IConversionRegistry conversionRegistry = PeripheralFramework.getConversionRegistry();
+
+        try {
+            for (int i = 0; i < args.length; ++i) {
+                if (IComputerAccess.class.isAssignableFrom(javaParams[i])) {
+                    args[i] = access;
+                } else if (ILuaContext.class.isAssignableFrom(javaParams[i])) {
+                    args[i] = context;
+                } else {
+                    args[i] = conversionRegistry.toJava(arguments[i], javaParams[i]);
                 }
-                args[i] = convert;
-            } else {
-                throw new LuaException(String.format("expected %s, got nil", LuaType.getLuaName(javaParams[i])));
             }
+        } catch (TypeConversionException e) {
+            throw new LuaException(e.getMessage());
         }
 
         try {
@@ -99,12 +101,12 @@ public class WrapperMethod {
                 final Object[] result = ((MultiReturn) method.invoke(instance, args)).getValues();
                 // convert its inner members
                 for (int i = 0; i < result.length; ++i) {
-                    result[i] = LuaType.toLua(result[i]);
+                    result[i] = conversionRegistry.toLua(result[i]);
                 }
                 return result;
             } else {
                 // return the result converted, if the method returns Object[] this will be converted to a Map
-                return new Object[]{LuaType.toLua(method.invoke(instance, args))};
+                return new Object[]{conversionRegistry.toLua(method.invoke(instance, args))};
             }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
