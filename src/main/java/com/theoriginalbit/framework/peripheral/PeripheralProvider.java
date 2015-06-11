@@ -18,9 +18,8 @@ package com.theoriginalbit.framework.peripheral;
 import com.google.common.base.Preconditions;
 import com.theoriginalbit.framework.peripheral.api.peripheral.IPeripheralHolder;
 import com.theoriginalbit.framework.peripheral.api.peripheral.Peripheral;
-import com.theoriginalbit.framework.peripheral.api.require.Requires;
+import com.theoriginalbit.framework.peripheral.util.Validation;
 import com.theoriginalbit.framework.peripheral.wrapper.WrapperComputer;
-import cpw.mods.fml.common.Loader;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.peripheral.IPeripheralProvider;
 import net.minecraft.tileentity.TileEntity;
@@ -73,10 +72,10 @@ public final class PeripheralProvider implements IPeripheralProvider {
             // make sure the provided peripheral is annotated
             Preconditions.checkArgument(isLuaPeripheral(peripheral), "The peripheral returned from the ILuaPeripheralProvider was not annotated with LuaPeripheral");
             // wrap the return
-            if (isEnabledLuaPeripheral(peripheral)) {
+            if (Validation.isEnabled(peripheral.getClass())) {
                 wrapper = new WrapperComputer(peripheral);
             }
-        } else if (isEnabledLuaPeripheral(tile)) { // if the TileEntity is annotated as a LuaPeripheral
+        } else if (Validation.isEnabled(tile.getClass())) { // if the TileEntity is annotated as a LuaPeripheral
             wrapper = new WrapperComputer(tile);
         }
 
@@ -91,35 +90,5 @@ public final class PeripheralProvider implements IPeripheralProvider {
 
     private static boolean isLuaPeripheral(Object peripheral) {
         return peripheral.getClass().isAnnotationPresent(Peripheral.class);
-    }
-
-    private static boolean isEnabledLuaPeripheral(Object peripheral) {
-        final Class<?> clazz = peripheral.getClass();
-        // if there is no annotation, it's not a valid peripheral
-        if (!clazz.isAnnotationPresent(Peripheral.class)) {
-            return false;
-        }
-        // if there is no Requires annotation we can assume it should always be enabled
-        if (!clazz.isAnnotationPresent(Requires.class)) {
-            return true;
-        }
-
-        // get the mod IDs specified that this method should be enabled for
-        final Requires requires = clazz.getAnnotation(Requires.class);
-        final String[] modIds = requires.modIds();
-        final boolean allRequired = requires.allRequired();
-
-        // loop through the mod IDs and see if any are present
-        for (final String mid : modIds) {
-            final boolean loaded = Loader.isModLoaded(mid);
-            if (loaded && !allRequired) { // if it is loaded, and not all are required, we can enable this peripheral
-                return true;
-            } else if (!loaded && allRequired) { // if it's not loaded, and all are required, we cannot enable this peripheral
-                return false;
-            }
-        }
-
-        // all mods were required, and all were loaded
-        return true;
     }
 }

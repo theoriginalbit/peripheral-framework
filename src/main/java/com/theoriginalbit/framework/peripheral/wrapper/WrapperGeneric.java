@@ -23,9 +23,8 @@ import com.theoriginalbit.framework.peripheral.api.event.Detach;
 import com.theoriginalbit.framework.peripheral.api.event.List;
 import com.theoriginalbit.framework.peripheral.api.lua.Function;
 import com.theoriginalbit.framework.peripheral.api.peripheral.Peripheral;
-import com.theoriginalbit.framework.peripheral.api.require.Requires;
 import com.theoriginalbit.framework.peripheral.api.lua.Alias;
-import cpw.mods.fml.common.Loader;
+import com.theoriginalbit.framework.peripheral.util.Validation;
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.peripheral.IComputerAccess;
@@ -62,7 +61,7 @@ class WrapperGeneric implements IPeripheral {
 
         Method attach = null, detach = null;
         for (Method m : peripheralClass.getMethods()) {
-            if (isEnabledLuaFunction(m)) {
+            if (Validation.isEnabled(m)) {
                 wrapMethod(peripheral, m);
             } else if (m.isAnnotationPresent(Alias.class)) {
                 throw new RuntimeException("Alias annotations should only occur on LuaFunction annotated methods");
@@ -176,35 +175,6 @@ class WrapperGeneric implements IPeripheral {
                 methods.put(alias, wrapper);
             }
         }
-    }
-
-    private boolean isEnabledLuaFunction(Method method) {
-        // if there is no annotation, we ignore it
-        if (!method.isAnnotationPresent(Function.class)) {
-            return false;
-        }
-        // if there is no Requires annotation we can assume it should always be enabled
-        if (!method.isAnnotationPresent(Requires.class)) {
-            return true;
-        }
-
-        // get the mod IDs specified that this method should be enabled for
-        final Requires requires = method.getAnnotation(Requires.class);
-        final String[] modIds = requires.modIds();
-        final boolean allRequired = requires.allRequired();
-
-        // loop through the mod IDs and see if any are present
-        for (final String mid : modIds) {
-            final boolean loaded = Loader.isModLoaded(mid);
-            if (loaded && !allRequired) { // if it is loaded, and not all are required, we can enable this method
-                return true;
-            } else if (!loaded && allRequired) { // if it's not loaded, and all are required, we cannot enable this method
-                return false;
-            }
-        }
-
-        // all mods were required, and all were loaded
-        return true;
     }
 
     private Method checkEventMethod(final Method m, String type) {
