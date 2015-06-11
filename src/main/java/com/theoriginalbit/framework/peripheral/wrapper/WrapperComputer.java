@@ -17,7 +17,7 @@ package com.theoriginalbit.framework.peripheral.wrapper;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.theoriginalbit.framework.peripheral.api.event.Computers;
+import com.theoriginalbit.framework.peripheral.api.event.Mount;
 import com.theoriginalbit.framework.peripheral.api.filesystem.IMount;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 
@@ -46,8 +46,8 @@ public class WrapperComputer extends WrapperGeneric {
         super(peripheral);
 
         final Class<?> peripheralClass = peripheral.getClass();
-        if (peripheralClass.isAnnotationPresent(Computers.Mount.class)) {
-            final Computers.Mount annotationMount = peripheralClass.getAnnotation(Computers.Mount.class);
+        if (peripheralClass.isAnnotationPresent(Mount.class)) {
+            final Mount annotationMount = peripheralClass.getAnnotation(Mount.class);
 
             // Build the specified mount classes
             for (Class<? extends IMount> clazz : annotationMount.value()) {

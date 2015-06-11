@@ -18,7 +18,9 @@ package com.theoriginalbit.framework.peripheral.wrapper;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.theoriginalbit.framework.peripheral.api.event.Computers;
+import com.theoriginalbit.framework.peripheral.api.event.Attach;
+import com.theoriginalbit.framework.peripheral.api.event.Detach;
+import com.theoriginalbit.framework.peripheral.api.event.List;
 import com.theoriginalbit.framework.peripheral.api.lua.Function;
 import com.theoriginalbit.framework.peripheral.api.peripheral.Peripheral;
 import com.theoriginalbit.framework.peripheral.api.require.Requires;
@@ -50,7 +52,6 @@ class WrapperGeneric implements IPeripheral {
     protected final Method methodDetach;
     protected final ArrayList<IComputerAccess> computers = Lists.newArrayList();
 
-
     public WrapperGeneric(Object peripheral) {
         final Class<?> peripheralClass = peripheral.getClass();
         final Peripheral peripheralLua = peripheralClass.getAnnotation(Peripheral.class);
@@ -66,17 +67,17 @@ class WrapperGeneric implements IPeripheral {
             } else if (m.isAnnotationPresent(Alias.class)) {
                 throw new RuntimeException("Alias annotations should only occur on LuaFunction annotated methods");
             }
-            if (m.isAnnotationPresent(Computers.Attach.class)) {
+            if (m.isAnnotationPresent(Attach.class)) {
                 attach = m;
             }
-            if (m.isAnnotationPresent(Computers.Detach.class)) {
+            if (m.isAnnotationPresent(Detach.class)) {
                 detach = m;
             }
         }
 
         // check for the @Computer fields and assign them to this instances computer list
         for (Field f : peripheralClass.getDeclaredFields()) {
-            if (f.isAnnotationPresent(Computers.List.class)) {
+            if (f.isAnnotationPresent(List.class)) {
                 try {
                     f.set(peripheral, computers);
                 } catch (IllegalAccessException e) {
