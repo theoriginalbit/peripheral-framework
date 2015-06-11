@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Joshua Asbury (@theoriginalbit)
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * <p/>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -43,7 +43,6 @@ import java.lang.reflect.Method;
  * @author theoriginalbit
  */
 public class WrapperMethod {
-
     private final Method method;
     private final Object instance;
     private final int luaParamsCount;
@@ -57,7 +56,7 @@ public class WrapperMethod {
         instance = peripheral;
         method = m;
         javaParams = method.getParameterTypes();
-        isMultiReturn = method.getReturnType().isAssignableFrom(MultiReturn.class);
+        isMultiReturn = MultiReturn.class.isAssignableFrom(method.getReturnType());
 
         // count how many parameters are required from Lua
         int count = javaParams.length;
@@ -96,18 +95,8 @@ public class WrapperMethod {
         }
 
         try {
-            if (isMultiReturn) {
-                // get the result
-                final Object[] result = ((MultiReturn) method.invoke(instance, args)).getValues();
-                // convert its inner members
-                for (int i = 0; i < result.length; ++i) {
-                    result[i] = conversionRegistry.toLua(result[i]);
-                }
-                return result;
-            } else {
-                // return the result converted, if the method returns Object[] this will be converted to a Map
-                return new Object[]{conversionRegistry.toLua(method.invoke(instance, args))};
-            }
+            Object result = conversionRegistry.toLua(method.invoke(instance, args));
+            return isMultiReturn ? (Object[]) result : new Object[]{result};
         } catch (IllegalAccessException e) {
             e.printStackTrace();
             throw new LuaException("Developer problem, please present your client log file to the developer of this peripheral.");
@@ -125,5 +114,4 @@ public class WrapperMethod {
             throw new LuaException(e.getMessage());
         }
     }
-
 }
