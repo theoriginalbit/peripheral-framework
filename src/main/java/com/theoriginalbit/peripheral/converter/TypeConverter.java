@@ -54,7 +54,7 @@ public class TypeConverter implements IConverterRegistry, IConversionRegistry {
         inbound.add(new ConverterMapInbound());
         inbound.add(new ConverterSetInbound());
 
-        inbound.add(new ConverterPrimative());
+        inbound.add(new ConverterPrimitive());
 
         outbound.add(new ConverterMultiReturnOutbound());
         outbound.add(new ConverterBooleanOutbound());
