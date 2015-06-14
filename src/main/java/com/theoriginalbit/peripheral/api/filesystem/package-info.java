@@ -1,8 +1,8 @@
 /**
  * This file is part of the official peripheral-framework API.
  * <p/>
- * You are hereby permitted to do as you wish with the peripheral-framework API (herein referred to as "the API"), so long
- * as it is redistributed unmodified and in full only. You may upload it in source-form with your projects or
+ * You are hereby permitted to do as you wish with the peripheral-framework API (herein referred to as "the API"), so
+ * long as it is redistributed unmodified and in full only. You may upload it in source-form with your projects or
  * interact with it in any way you feel is appropriate.
  * <p/>
  * We accept absolutely no liability and offer no warranty; the API is provided on an as-is basis. We won't and can't

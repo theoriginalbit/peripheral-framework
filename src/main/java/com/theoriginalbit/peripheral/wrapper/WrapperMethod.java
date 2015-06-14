@@ -1,5 +1,5 @@
 /**
- * Copyright 2014 Joshua Asbury (@theoriginalbit)
+ * Copyright 2014-2015 Joshua Asbury (@theoriginalbit)
  * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,9 @@ package com.theoriginalbit.peripheral.wrapper;
 import com.google.common.base.Preconditions;
 import com.theoriginalbit.peripheral.PeripheralFramework;
 import com.theoriginalbit.peripheral.api.converter.IConversionRegistry;
+import com.theoriginalbit.peripheral.api.lua.Function;
 import com.theoriginalbit.peripheral.api.util.MultiReturn;
 import com.theoriginalbit.peripheral.api.util.TypeConversionException;
-import com.theoriginalbit.peripheral.api.lua.Function;
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.peripheral.IComputerAccess;
@@ -71,7 +71,8 @@ public class WrapperMethod {
         luaParamsCount = count;
     }
 
-    public Object[] invoke(IComputerAccess access, ILuaContext context, Object[] arguments) throws LuaException, InterruptedException {
+    public Object[] invoke(IComputerAccess access, ILuaContext context, Object[] arguments) throws LuaException,
+            InterruptedException {
         // make sure they've provided enough args
         if (arguments.length != luaParamsCount) {
             throw new LuaException(String.format("expected %d arg(s), got %d", luaParamsCount, arguments.length));

@@ -1,12 +1,12 @@
 /**
- * Copyright 2014 Joshua Asbury (@theoriginalbit)
- *
+ * Copyright 2014-2015 Joshua Asbury (@theoriginalbit)
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * <p/>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -41,9 +41,9 @@ import java.util.Random;
  */
 public abstract class UpgradeTool implements ITurtleUpgrade {
     private static final Random rand = new Random();
+    protected final ItemStack craftingStack;
     private final int id;
     private final String name;
-    protected final ItemStack craftingStack;
 
     protected UpgradeTool(int upgradeId, String adjective, ItemStack craftingItemStack) {
         id = upgradeId;
@@ -94,11 +94,13 @@ public abstract class UpgradeTool implements ITurtleUpgrade {
 
     protected abstract boolean canAttackEntity(Entity entity);
 
-    protected abstract ArrayList<ItemStack> attackEntity(ITurtleAccess turtle, Entity entity) throws TurtleAttackException;
+    protected abstract ArrayList<ItemStack> attackEntity(ITurtleAccess turtle, Entity entity) throws
+            TurtleAttackException;
 
     protected abstract boolean canAttackBlock(World world, int x, int y, int z, int dir, EntityPlayer turtle);
 
-    protected abstract ArrayList<ItemStack> attackBlock(World world, int x, int y, int z, int dir, EntityPlayer turtle) throws TurtleAttackException;
+    protected abstract ArrayList<ItemStack> attackBlock(World world, int x, int y, int z, int dir, EntityPlayer
+            turtle) throws TurtleAttackException;
 
     protected abstract boolean canHarvestBlock(World world, int x, int y, int z);
 

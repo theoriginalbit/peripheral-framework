@@ -1,12 +1,12 @@
 /**
- * Copyright 2014 Joshua Asbury (@theoriginalbit)
- *
+ * Copyright 2014-2015 Joshua Asbury (@theoriginalbit)
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * <p/>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,9 +21,9 @@ import com.google.common.collect.Maps;
 import com.theoriginalbit.peripheral.api.event.Attach;
 import com.theoriginalbit.peripheral.api.event.ComputerList;
 import com.theoriginalbit.peripheral.api.event.Detach;
+import com.theoriginalbit.peripheral.api.lua.Alias;
 import com.theoriginalbit.peripheral.api.lua.Function;
 import com.theoriginalbit.peripheral.api.peripheral.Peripheral;
-import com.theoriginalbit.peripheral.api.lua.Alias;
 import com.theoriginalbit.peripheral.util.Validation;
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.lua.LuaException;
@@ -108,7 +108,8 @@ class WrapperGeneric implements IPeripheral {
     }
 
     @Override
-    public Object[] callMethod(IComputerAccess computer, ILuaContext context, int methodIdx, Object[] arguments) throws LuaException, InterruptedException {
+    public Object[] callMethod(IComputerAccess computer, ILuaContext context, int methodIdx, Object[] arguments)
+            throws LuaException, InterruptedException {
         if (instance instanceof TileEntity) {
             if (((TileEntity) instance).isInvalid()) {
                 throw new LuaException("peripheral no longer exists");
