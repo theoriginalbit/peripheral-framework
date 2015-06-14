@@ -128,6 +128,7 @@ public class WrapperComputer extends WrapperGeneric {
         int count = MOUNT_COUNTS.get(id);
         if (--count == 0) {
             for (IMount mount : mounts) {
+                computer.mount(mount.getMountLocation(), mount);
                 computer.unmount(mount.getMountLocation());
             }
         }
