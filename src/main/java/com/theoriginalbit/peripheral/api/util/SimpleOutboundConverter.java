@@ -33,5 +33,5 @@ public abstract class SimpleOutboundConverter<T> implements ILuaTypeConverter {
         return type.isInstance(obj) ? convert(registry, (T) obj) : null;
     }
 
-    protected abstract Object convert(IConversionRegistry registry, T value) throws TypeConversionException;
+    public abstract Object convert(IConversionRegistry registry, T value) throws TypeConversionException;
 }

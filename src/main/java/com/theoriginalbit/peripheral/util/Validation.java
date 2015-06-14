@@ -16,6 +16,7 @@
 package com.theoriginalbit.peripheral.util;
 
 import com.theoriginalbit.peripheral.api.lua.Function;
+import com.theoriginalbit.peripheral.api.peripheral.Peripheral;
 import com.theoriginalbit.peripheral.api.require.RequireAll;
 import com.theoriginalbit.peripheral.api.require.RequireOne;
 import cpw.mods.fml.common.Loader;
@@ -28,7 +29,7 @@ import java.lang.reflect.Method;
 public final class Validation {
     public static boolean isEnabled(Class<?> peripheral) {
         // if there is no annotation, we ignore it
-        if (!peripheral.isAnnotationPresent(Function.class)) {
+        if (!peripheral.isAnnotationPresent(Peripheral.class)) {
             return false;
         }
 

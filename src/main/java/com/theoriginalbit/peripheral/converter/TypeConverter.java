@@ -1,5 +1,5 @@
 /**
- * Copyright 2014-2015 Joshua Asbury (@theoriginalbit)
+ * Copyright 2014 Joshua Asbury (@theoriginalbit)
  * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,9 @@ import com.google.common.reflect.TypeToken;
 import com.theoriginalbit.peripheral.api.converter.*;
 import com.theoriginalbit.peripheral.api.util.JavaTypeConverterAdapter;
 import com.theoriginalbit.peripheral.api.util.TypeConversionException;
-import com.theoriginalbit.peripheral.util.Log;
 import com.theoriginalbit.peripheral.converter.inbound.*;
 import com.theoriginalbit.peripheral.converter.outbound.*;
+import com.theoriginalbit.peripheral.util.Log;
 
 import java.lang.reflect.Type;
 import java.util.Deque;
@@ -110,17 +110,11 @@ public class TypeConverter implements IConverterRegistry, IConversionRegistry {
                 return response;
         }
 
-        final TypeToken<?> type = TypeToken.of(expected);
-        throw new TypeConversionException("Failed to convert value %s to %s", obj, type.getRawType().getSimpleName());
-    }
-
-    @Override
-    public <T> T toJava(Object obj, Class<? extends T> clazz) throws TypeConversionException {
-        Object result = toJava(obj, (Type) clazz);
-        if (!clazz.isInstance(result)) {
-            throw new TypeConversionException("Conversion of %s to type %s failed", obj, clazz);
-        }
-        return clazz.cast(result);
+        throw new TypeConversionException(
+                "expected %s, got %s",
+                TypeToken.of(expected).getRawType().getSimpleName().toLowerCase(),
+                obj.getClass().getSimpleName().toLowerCase()
+        );
     }
 
     @Override

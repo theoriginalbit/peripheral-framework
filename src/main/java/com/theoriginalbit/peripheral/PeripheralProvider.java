@@ -39,7 +39,6 @@ import java.util.WeakHashMap;
  * @author theoriginalbit
  */
 public final class PeripheralProvider implements IPeripheralProvider {
-
     private final WeakHashMap<TileEntity, WrapperComputer> PERIPHERAL_CACHE = new WeakHashMap<TileEntity, WrapperComputer>();
 
     /**
@@ -65,17 +64,17 @@ public final class PeripheralProvider implements IPeripheralProvider {
 
         // does the TileEntity specify that it provides an external peripheral
         if (tile instanceof IPeripheralHolder) {
-            // it was an ILuaPeripheralProvider, why is there a LuaPeripheral annotation present?
-            Preconditions.checkArgument(!isLuaPeripheral(tile), "Peripherals cannot implement ILuaPeripheralProvider and have the LuaPeripheral annotation present");
-            // get the peripheral from the ILuaPeripheralProvider
+            // it was an IPeripheralHolder, why is there a Peripheral annotation present?
+            Preconditions.checkArgument(!isLuaPeripheral(tile), "Peripherals cannot implement IPeripheralHolder and have the Peripheral annotation present");
+            // get the peripheral from the IPeripheralHolder
             final Object peripheral = ((IPeripheralHolder) tile).getPeripheral();
             // make sure the provided peripheral is annotated
-            Preconditions.checkArgument(isLuaPeripheral(peripheral), "The peripheral returned from the ILuaPeripheralProvider was not annotated with LuaPeripheral");
+            Preconditions.checkArgument(isLuaPeripheral(peripheral), "The peripheral returned from the IPeripheralHolder was not annotated with Peripheral");
             // wrap the return
             if (Validation.isEnabled(peripheral.getClass())) {
                 wrapper = new WrapperComputer(peripheral);
             }
-        } else if (Validation.isEnabled(tile.getClass())) { // if the TileEntity is annotated as a LuaPeripheral
+        } else if (Validation.isEnabled(tile.getClass())) { // if the TileEntity is annotated as a Peripheral
             wrapper = new WrapperComputer(tile);
         }
 

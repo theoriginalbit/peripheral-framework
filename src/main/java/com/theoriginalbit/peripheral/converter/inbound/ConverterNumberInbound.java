@@ -24,7 +24,7 @@ import com.theoriginalbit.peripheral.api.util.TypeConversionException;
  */
 public class ConverterNumberInbound extends GenericInboundConverterAdapter {
     @Override
-    protected Object toJava(IConversionRegistry registry, Object obj, Class<?> expected) throws TypeConversionException {
+    public Object toJava(IConversionRegistry registry, Object obj, Class<?> expected) throws TypeConversionException {
         final Double d;
         if (obj instanceof Double) {
             d = (Double) obj;

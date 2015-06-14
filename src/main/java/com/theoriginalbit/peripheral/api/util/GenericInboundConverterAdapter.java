@@ -31,5 +31,5 @@ public abstract class GenericInboundConverterAdapter implements IGenericJavaType
         return toJava(registry, obj, type.getRawType());
     }
 
-    protected abstract Object toJava(IConversionRegistry registry, Object obj, Class<?> expected) throws TypeConversionException;
+    public abstract Object toJava(IConversionRegistry registry, Object obj, Class<?> expected) throws TypeConversionException;
 }

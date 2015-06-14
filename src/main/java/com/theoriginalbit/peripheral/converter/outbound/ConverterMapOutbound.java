@@ -27,7 +27,7 @@ import java.util.Map;
  */
 public class ConverterMapOutbound extends SimpleOutboundConverter<Map<?, ?>> {
     @Override
-    protected Object convert(IConversionRegistry registry, Map<?, ?> value) throws TypeConversionException {
+    public Object convert(IConversionRegistry registry, Map<?, ?> value) throws TypeConversionException {
         Map<Object, Object> result = Maps.newHashMap();
         for (Map.Entry<?, ?> e : value.entrySet()) {
             Object k = registry.toLua(e.getKey());

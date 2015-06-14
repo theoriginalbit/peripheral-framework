@@ -22,7 +22,7 @@ import com.google.common.collect.ImmutableBiMap;
  * @author Joshua Asbury (@theoriginalbit)
  */
 public final class TypeUtil {
-    public static final BiMap<Class<?>, Class<?>> PRIMATIVE_TYPE_MAP = ImmutableBiMap.<Class<?>, Class<?>>builder()
+    public static final BiMap<Class<?>, Class<?>> PRIMITIVE_TYPE_MAP = ImmutableBiMap.<Class<?>, Class<?>>builder()
             .put(boolean.class, Boolean.class)
             .put(byte.class, Byte.class)
             .put(char.class, Character.class)
@@ -35,8 +35,8 @@ public final class TypeUtil {
             .build();
 
     public static boolean compareTypes(Class<?> lhs, Class<?> rhs) {
-        if (lhs.isPrimitive()) lhs = PRIMATIVE_TYPE_MAP.get(lhs);
-        if (rhs.isPrimitive()) rhs = PRIMATIVE_TYPE_MAP.get(rhs);
+        if (lhs.isPrimitive()) lhs = PRIMITIVE_TYPE_MAP.get(lhs);
+        if (rhs.isPrimitive()) rhs = PRIMITIVE_TYPE_MAP.get(rhs);
         return lhs.equals(rhs);
     }
 }

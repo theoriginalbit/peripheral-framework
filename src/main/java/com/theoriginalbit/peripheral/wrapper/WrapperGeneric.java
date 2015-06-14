@@ -19,8 +19,8 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.theoriginalbit.peripheral.api.event.Attach;
+import com.theoriginalbit.peripheral.api.event.ComputerList;
 import com.theoriginalbit.peripheral.api.event.Detach;
-import com.theoriginalbit.peripheral.api.event.List;
 import com.theoriginalbit.peripheral.api.lua.Function;
 import com.theoriginalbit.peripheral.api.peripheral.Peripheral;
 import com.theoriginalbit.peripheral.api.lua.Alias;
@@ -76,7 +76,7 @@ class WrapperGeneric implements IPeripheral {
 
         // check for the @Computer fields and assign them to this instances computer list
         for (Field f : peripheralClass.getDeclaredFields()) {
-            if (f.isAnnotationPresent(List.class)) {
+            if (f.isAnnotationPresent(ComputerList.class)) {
                 try {
                     f.set(peripheral, computers);
                 } catch (IllegalAccessException e) {

@@ -28,7 +28,7 @@ import java.util.Set;
  */
 public class ConverterSetOutbound extends SimpleOutboundConverter<Set<?>> {
     @Override
-    protected Object convert(IConversionRegistry registry, Set<?> value) throws TypeConversionException {
+    public Object convert(IConversionRegistry registry, Set<?> value) throws TypeConversionException {
         Map<Object, Boolean> result = Maps.newHashMap();
         for (Object e : value) {
             result.put(registry.toLua(e), true);

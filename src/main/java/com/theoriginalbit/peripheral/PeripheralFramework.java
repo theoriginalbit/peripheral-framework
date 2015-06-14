@@ -16,8 +16,10 @@
 package com.theoriginalbit.peripheral;
 
 import com.theoriginalbit.peripheral.api.converter.IConversionRegistry;
-import com.theoriginalbit.peripheral.api.converter.IConverterRegistry;
 import com.theoriginalbit.peripheral.converter.TypeConverter;
+import com.theoriginalbit.peripheral.util.Log;
+import cpw.mods.fml.common.Loader;
+import dan200.computercraft.api.ComputerCraftAPI;
 
 /**
  * @author Joshua Asbury (@theoriginalbit)
@@ -25,18 +27,14 @@ import com.theoriginalbit.peripheral.converter.TypeConverter;
 public final class PeripheralFramework {
     private static final TypeConverter CONVERTER = new TypeConverter();
 
-    private PeripheralFramework() {
-        // prevent instances
-    }
-
     public static void init() {
+        if (Loader.isModLoaded("ComputerCraft")) {
+            Log.info("Registering peripheral provider for ComputerCraft");
+            ComputerCraftAPI.registerPeripheralProvider(new PeripheralProvider());
+        }
     }
 
     public static IConversionRegistry getConversionRegistry() {
-        return CONVERTER;
-    }
-
-    public static IConverterRegistry getConverterRegistry() {
         return CONVERTER;
     }
 }

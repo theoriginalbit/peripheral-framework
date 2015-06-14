@@ -25,7 +25,7 @@ public class MultiReturn {
         this.values = values;
     }
 
-    public static MultiReturn wrap(Object... values) {
+    public static MultiReturn of(Object... values) {
         return new MultiReturn(values);
     }
 

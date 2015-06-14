@@ -29,7 +29,7 @@ import java.util.Map;
  */
 public class ConverterItemStackInbound extends GenericInboundConverterAdapter {
     @Override
-    protected Object toJava(IConversionRegistry registry, Object obj, Class<?> expected) throws TypeConversionException {
+    public Object toJava(IConversionRegistry registry, Object obj, Class<?> expected) throws TypeConversionException {
         if (expected == ItemStack.class && obj instanceof Map) {
             Map<?, ?> m = (Map<?, ?>) obj;
 

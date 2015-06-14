@@ -24,7 +24,7 @@ import com.theoriginalbit.peripheral.api.util.TypeConversionException;
  */
 public class ConverterRaw extends GenericInboundConverterAdapter {
     @Override
-    protected Object toJava(IConversionRegistry registry, Object obj, Class<?> expected) throws TypeConversionException {
+    public Object toJava(IConversionRegistry registry, Object obj, Class<?> expected) throws TypeConversionException {
         return (expected == Object.class) ? obj : null;
     }
 }

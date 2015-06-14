@@ -25,7 +25,5 @@ import java.lang.reflect.Type;
 public interface IConversionRegistry {
     Object toJava(Object obj, Type expected) throws TypeConversionException;
 
-    <T> T toJava(Object obj, Class<? extends T> clazz) throws TypeConversionException;
-
     Object toLua(Object obj) throws TypeConversionException;
 }

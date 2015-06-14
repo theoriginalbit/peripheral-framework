@@ -25,7 +25,7 @@ import com.theoriginalbit.peripheral.util.TypeUtil;
  */
 public class ConverterPrimitive extends GenericInboundConverterAdapter {
     @Override
-    protected Object toJava(IConversionRegistry registry, Object obj, Class<?> expected) throws TypeConversionException {
+    public Object toJava(IConversionRegistry registry, Object obj, Class<?> expected) throws TypeConversionException {
         if (TypeUtil.compareTypes(obj.getClass(), expected)) return obj;
         return null;
     }

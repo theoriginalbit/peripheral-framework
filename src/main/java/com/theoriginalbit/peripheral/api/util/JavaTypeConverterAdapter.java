@@ -29,7 +29,7 @@ public class JavaTypeConverterAdapter extends GenericInboundConverterAdapter {
     }
 
     @Override
-    protected Object toJava(IConversionRegistry registry, Object obj, Class<?> expected) throws TypeConversionException {
+    public Object toJava(IConversionRegistry registry, Object obj, Class<?> expected) throws TypeConversionException {
         return converter.toJava(registry, obj, expected);
     }
 }

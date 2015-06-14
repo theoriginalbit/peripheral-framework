@@ -26,7 +26,7 @@ import java.util.Arrays;
  */
 public class ConverterEnumInbound extends GenericInboundConverterAdapter {
     @Override
-    protected Object toJava(IConversionRegistry registry, Object obj, Class<?> expected) throws TypeConversionException {
+    public Object toJava(IConversionRegistry registry, Object obj, Class<?> expected) throws TypeConversionException {
         if (expected.isEnum()) {
             Object[] constants = expected.getEnumConstants();
             if (obj instanceof String) {

@@ -18,9 +18,9 @@ package com.theoriginalbit.peripheral.wrapper;
 import com.google.common.base.Preconditions;
 import com.theoriginalbit.peripheral.PeripheralFramework;
 import com.theoriginalbit.peripheral.api.converter.IConversionRegistry;
-import com.theoriginalbit.peripheral.api.lua.Function;
 import com.theoriginalbit.peripheral.api.util.MultiReturn;
 import com.theoriginalbit.peripheral.api.util.TypeConversionException;
+import com.theoriginalbit.peripheral.api.lua.Function;
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.peripheral.IComputerAccess;
@@ -56,7 +56,7 @@ public class WrapperMethod {
         instance = peripheral;
         method = m;
         javaParams = method.getParameterTypes();
-        isMultiReturn = MultiReturn.class.isAssignableFrom(method.getReturnType());
+        isMultiReturn = MultiReturn.class.isAssignableFrom(m.getReturnType());
 
         // count how many parameters are required from Lua
         int count = javaParams.length;
@@ -71,7 +71,7 @@ public class WrapperMethod {
         luaParamsCount = count;
     }
 
-    public Object[] invoke(IComputerAccess access, ILuaContext context, Object[] arguments) throws LuaException {
+    public Object[] invoke(IComputerAccess access, ILuaContext context, Object[] arguments) throws LuaException, InterruptedException {
         // make sure they've provided enough args
         if (arguments.length != luaParamsCount) {
             throw new LuaException(String.format("expected %d arg(s), got %d", luaParamsCount, arguments.length));
