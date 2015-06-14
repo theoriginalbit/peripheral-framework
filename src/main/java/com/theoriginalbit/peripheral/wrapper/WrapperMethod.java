@@ -29,18 +29,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * This wraps the method supplied from the LuaPeripheral, it provides
- * a simple invocation which converts the Lua arguments supplied to
- * the Java type expected of the LuaFunction, as well as converting
- * the return value back to Lua types. It will also provide user friendly
- * errors when the method is invoked incorrectly, such as 'expected string
- * got number' or 'expected 4 arguments, got 3'
- * <p/>
- * IMPORTANT:
- * This is a backend class, you should never need to use this, and
- * modifying this may have unexpected results.
- *
- * @author theoriginalbit
+ * @author Joshua Asbury (@theoriginalbit)
  */
 public class WrapperMethod {
     private final Method method;

@@ -39,8 +39,7 @@ import java.util.LinkedHashMap;
 import java.util.Set;
 
 /**
- * @author theoriginalbit
- * @since 8/11/14
+ * @author Joshua Asbury (@theoriginalbit)
  */
 class WrapperGeneric implements IPeripheral {
     protected final Object instance;
@@ -152,7 +151,7 @@ class WrapperGeneric implements IPeripheral {
         }
     }
 
-    /**
+    /*
      * dan200, why do we have to do this? why can't we just use Java's native equals?
      */
     @Override

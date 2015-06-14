@@ -15,6 +15,9 @@
  */
 package com.theoriginalbit.peripheral.api.filesystem;
 
+/**
+ * @author Joshua Asbury (@theoriginalbit)
+ */
 public interface IMount extends dan200.computercraft.api.filesystem.IMount {
     String getMountLocation();
 }

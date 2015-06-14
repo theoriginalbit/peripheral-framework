@@ -36,8 +36,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * @author theoriginalbit
- * @since 13/10/2014
+ * @author Joshua Asbury (@theoriginalbit)
  */
 public abstract class UpgradeTool implements ITurtleUpgrade {
     private static final Random rand = new Random();

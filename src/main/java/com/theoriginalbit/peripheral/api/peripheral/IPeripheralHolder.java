@@ -16,18 +16,8 @@
 package com.theoriginalbit.peripheral.api.peripheral;
 
 /**
- * In the event that you don't want to have your peripheral implementation
- * in your TileEntity you can implement this interface and return an object
- * that is an instance of your peripheral implementation.
- *
- * See the example program for usage
- *
- * @author theoriginalbit
+ * @author Joshua Asbury (@theoriginalbit)
  */
 public interface IPeripheralHolder {
-    /**
-     * @return an instance of an object which is annotated with
-     * LuaPeripheral and pertains to your TileEntity
-     */
     Object getPeripheral();
 }

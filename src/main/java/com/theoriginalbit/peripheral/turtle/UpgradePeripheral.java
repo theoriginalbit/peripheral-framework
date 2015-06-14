@@ -21,8 +21,7 @@ import dan200.computercraft.api.turtle.*;
 import net.minecraft.item.ItemStack;
 
 /**
- * @author theoriginalbit
- * @since 13/10/2014
+ * @author Joshua Asbury (@theoriginalbit)
  */
 public abstract class UpgradePeripheral implements ITurtleUpgrade {
     private final int id;
@@ -83,5 +82,4 @@ public abstract class UpgradePeripheral implements ITurtleUpgrade {
     protected abstract void update(ITurtleAccess turtle, TurtleSide side, WrapperComputer peripheral);
 
     protected abstract WrapperComputer getPeripheralWrapper(ITurtleAccess access, TurtleSide side);
-
 }

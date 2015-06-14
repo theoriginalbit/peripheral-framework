@@ -71,29 +71,44 @@ public class TypeConverter implements IConverterRegistry, IConversionRegistry {
         outbound.add(new ConverterStringOutbound());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void register(IJavaTypeConverter converter) {
         Log.trace("Registering Java type converter %s", converter);
         inbound.addFirst(new JavaTypeConverterAdapter(converter));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void register(IGenericJavaTypeConverter converter) {
         Log.trace("Registering generic Java type converter %s", converter);
         inbound.addFirst(converter);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void register(ILuaTypeConverter converter) {
         Log.trace("Registering Lua type converter %s", converter);
         outbound.addFirst(converter);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void ignore(Class<?> ignored, boolean includeSubclasses) {
         (includeSubclasses ? subclassIgnored : directlyIgnored).add(ignored);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Object toJava(Object obj, Type expected) throws TypeConversionException {
         if (obj == null) {
@@ -117,6 +132,9 @@ public class TypeConverter implements IConverterRegistry, IConversionRegistry {
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Object toLua(Object obj) throws TypeConversionException {
         if (obj == null || isIgnored(obj.getClass())) return obj;

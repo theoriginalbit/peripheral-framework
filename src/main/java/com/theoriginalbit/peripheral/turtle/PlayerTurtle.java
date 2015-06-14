@@ -22,15 +22,12 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 
 /**
- * @author theoriginalbit
- * @since 26/10/14
+ * @author Joshua Asbury (@theoriginalbit)
  */
 public class PlayerTurtle extends FakePlayer {
-
     public PlayerTurtle(ITurtleAccess turtle) {
         super((WorldServer) turtle.getWorld(), new GameProfile(null, "MoarPeripheralsTurtle"));
         final ChunkCoordinates coordinates = turtle.getPosition();
         setPosition(coordinates.posX + 0.5d, coordinates.posY + 0.5d, coordinates.posZ + 0.5d);
     }
-
 }

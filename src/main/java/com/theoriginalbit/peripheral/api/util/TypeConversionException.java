@@ -19,10 +19,24 @@ package com.theoriginalbit.peripheral.api.util;
  * @author Joshua Asbury (@theoriginalbit)
  */
 public class TypeConversionException extends Exception {
+    /**
+     * Constructs a new TypeConversionException with the specified detail message.
+     *
+     * @param message the detail message. The detail message is saved for later retrieval by the {@link #getMessage()}
+     *                method.
+     */
     public TypeConversionException(String message) {
         super(message);
     }
 
+    /**
+     * Constructs a new TypeConversionException with the specified detail message formatted with the supplied args.
+     *
+     * @param message the detail message. The detail message is saved for later retrieval by the {@link #getMessage()}
+     *                method.
+     * @param args    the arguments to format into the message
+     * @see String#format
+     */
     public TypeConversionException(String message, Object... args) {
         this(String.format(message, args));
     }

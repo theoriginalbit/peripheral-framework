@@ -28,22 +28,13 @@ import net.minecraft.world.World;
 import java.util.WeakHashMap;
 
 /**
- * This is the Peripheral Provider that will wrap valid TileEntities
- * and return them to ComputerCraft for usage. See IPeripheralProvider
- * for more information
- * <p/>
- * IMPORTANT:
- * This is a backend class that is very important for operation of this
- * framework, modifying it may have unexpected results.
- *
- * @author theoriginalbit
+ * @author Joshua Asbury (@theoriginalbit)
  */
 public final class PeripheralProvider implements IPeripheralProvider {
     private final WeakHashMap<TileEntity, WrapperComputer> PERIPHERAL_CACHE = new WeakHashMap<TileEntity, WrapperComputer>();
 
     /**
-     * Provide ComputerCraft with an IPeripheral wrapper implementation
-     * of a Peripheral-Framework peripheral.
+     * {@inheritDoc}
      */
     @Override
     public final IPeripheral getPeripheral(World world, int x, int y, int z, int side) {

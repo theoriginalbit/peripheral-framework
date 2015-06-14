@@ -27,11 +27,22 @@ public abstract class SimpleOutboundConverter<T> implements ILuaTypeConverter {
         // nothing to add
     }).getRawType();
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @SuppressWarnings("unchecked")
     public Object toLua(IConversionRegistry registry, Object obj) throws TypeConversionException {
         return type.isInstance(obj) ? convert(registry, (T) obj) : null;
     }
 
+    /**
+     * Converts the supplied value from a Java value to valid Lua value
+     *
+     * @param registry the conversion registry for recursive calls
+     * @param value    the value to convert
+     * @return the converted value or {@code null} if it cannot be converted
+     * @throws TypeConversionException if conversion failed
+     */
     public abstract Object convert(IConversionRegistry registry, T value) throws TypeConversionException;
 }

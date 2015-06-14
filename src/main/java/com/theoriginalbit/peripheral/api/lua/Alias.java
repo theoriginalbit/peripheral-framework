@@ -21,11 +21,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Marks that you wish the LuaFunction to appear under multiple names
- * Lua-side. This would be commonly used to provide different spellings
- * of the method name, for example `isColor` and `isColour`.
- *
- * @author theoriginalbit
+ * @author Joshua Asbury (@theoriginalbit)
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)

@@ -16,10 +16,15 @@
 package com.theoriginalbit.peripheral.api.util;
 
 /**
- * @author theoriginalbit
- * @since 14/11/14
+ * @author Joshua Asbury (@theoriginalbit)
  */
 public class TurtleAttackException extends Exception {
+    /**
+     * Constructs a new TurtleDigException with the specified detail message.
+     *
+     * @param reason the detail message. The detail message is saved for later retrieval by the {@link #getMessage()}
+     *               method.
+     */
     public TurtleAttackException(String reason) {
         super(reason);
     }

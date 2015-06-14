@@ -24,9 +24,7 @@ import java.lang.reflect.Array;
 import java.util.Map;
 
 /**
- * Converts an array to/from Lua
- *
- * @author theoriginalbit
+ * @author Joshua Asbury (@theoriginalbit)
  */
 public class ConverterArrayOutbound implements ILuaTypeConverter {
     @Override

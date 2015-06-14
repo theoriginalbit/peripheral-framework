@@ -64,17 +64,15 @@ public class ConverterItemStackOutbound implements ILuaTypeConverter {
         try {
             return is.getUnlocalizedName();
         } catch (Exception ignored) {
+            return "unknown";
         }
-
-        return "unknown";
     }
 
     private String getRawNameForStack(ItemStack is) {
         try {
             return is.getUnlocalizedName().toLowerCase();
         } catch (Exception ignored) {
+            return "unknown";
         }
-
-        return "unknown";
     }
 }

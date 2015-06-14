@@ -21,12 +21,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * This annotation indicates that you would like your TileEntity to be
- * wrapped as a peripheral. The "value" argument is required as it
- * specifies the type of the peripheral when a player makes a call to
- * peripheral.getType() in-game.
- *
- * @author theoriginalbit
+ * @author Joshua Asbury (@theoriginalbit)
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

@@ -26,17 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * This wraps the object annotated with LuaPeripheral that is supplied to
- * it from the Peripheral Provider, it will then wrap any methods annotated
- * with LuaFunction and retain references of methods annotated with OnAttach
- * and OnDetach so that your peripheral will function with ComputerCraft's
- * expected IPeripheral interface.
- * <p/>
- * IMPORTANT:
- * This is a backend class, you should never need to use this, and
- * modifying this may have unexpected results.
- *
- * @author theoriginalbit
+ * @author Joshua Asbury (@theoriginalbit)
  */
 public class WrapperComputer extends WrapperGeneric {
     private static final HashMap<Integer, Integer> MOUNT_COUNTS = Maps.newHashMap();
